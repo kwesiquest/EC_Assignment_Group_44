@@ -1,17 +1,20 @@
-package ec;
+
 import org.vu.contest.ContestSubmission;
 
 import org.vu.contest.ContestEvaluation;
 
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
+import java.util.List;
 import java.lang.Math;
 
 public class player44 implements ContestSubmission
 {
 	Random rnd_;
 	ContestEvaluation evaluation_;
-	private int evaluations_limit_;
+	private int evaluations_limit_; //10.000
 
 	public player44()
 	{
@@ -38,7 +41,7 @@ public class player44 implements ContestSubmission
 		// Get evaluation properties
 		Properties props = evaluation.getProperties();
 		// Get evaluation limit
-		evaluations_limit_ = Integer.parseInt(props.getProperty("Evaluations"));
+		evaluations_limit_ = Integer.parseInt(props.getProperty("Evaluations")); //10.000
 		// Property keys depend on specific evaluation
 		// E.g. double param = Double.parseDouble(props.getProperty("property_name"));
 		boolean isMultimodal = Boolean.parseBoolean(props.getProperty("Multimodal"));
@@ -68,6 +71,73 @@ public class player44 implements ContestSubmission
 		
 		return result;
 	}
+	
+	
+	
+	public double[][] oneCutCrossOver(double [][] parents, int dimensions){
+		
+		
+		
+		return parents;
+	}
+	
+	
+	//Returns the IDs of the fittest individuals, note that individuals towards the end of the array are most fittest.
+	public int[] returnFittestIndividualIDs(double[][] populations, double fitnessPop[],int numberOfParentsToSelect){
+		
+		int[] topfitnessindividualsarray = new int[numberOfParentsToSelect]; //Stores id's of fit individuals
+		double[] topfitnesvaluessarray = new double[numberOfParentsToSelect]; //Stores fitness scores of fit individuals
+		double lowestValue = 0; //As fitness is 0 to 10.
+		for (int i = 0; i < fitnessPop.length; i++) {
+			
+			if( fitnessPop[i] > lowestValue) {
+				
+				//So we will be inserting this
+				
+				for (int j = 0; j < topfitnesvaluessarray.length; j++) {
+					
+					if (fitnessPop[i] > topfitnesvaluessarray[j]) {
+						
+						if (j == 0) { 
+							
+							//This value falls of the left of the array
+							
+						}
+						else if ( j == 9) {
+							
+							topfitnesvaluessarray[j-1] = topfitnesvaluessarray[j];
+							topfitnesvaluessarray[j] = fitnessPop[i];
+							
+							topfitnessindividualsarray[j-1] = topfitnessindividualsarray[j];
+							topfitnessindividualsarray[j] = i;
+							
+						}
+						else {
+							
+							topfitnesvaluessarray[j-1] = topfitnesvaluessarray[j];
+							
+							topfitnessindividualsarray[j-1] = topfitnessindividualsarray[j];
+							
+						}
+					
+					}
+					else { //fitness of to insert element is lower than current array element
+						
+						topfitnesvaluessarray[j-1] = fitnessPop[i]; //Settle in previous slot
+						
+						topfitnessindividualsarray[j-1] = i;
+						
+						j = 10;
+					}		
+				lowestValue = topfitnesvaluessarray[0];
+				}
+			}
+		}
+		return topfitnessindividualsarray;
+	}
+	
+	
+	
 
 	public void run()
 	{
@@ -89,12 +159,36 @@ public class player44 implements ContestSubmission
 		// calculate fitness
 		double fitnessPop[] = new double[popSize];
 		for (int i = 0; i < popSize; i++) {
-			fitnessPop[i] = bentCigarFunction(populations[i], dimensions);
+			fitnessPop[i] = rnd_.nextDouble();//(double) evaluation_.evaluate(populations[i]);//bentCigarFunction(populations[i], dimensions);
+			evals++;
+		}
+		int[] parents = returnFittestIndividualIDs(populations, fitnessPop, 10);
+		
+		//How do you instantiate a list from an array? is possible in other languages :thinking:
+		List<Integer> myList = new ArrayList<>();
+		for (int i = 0; i < parents.length; i++) {
+			myList.add(parents[i]);
 		}
 		
+		for (int i = 0; i < myList.size(); i++) {
+			int popthis = rnd_.nextInt(myList.size());
+			myList.remove(popthis);
+		}
+		
+		
+		
+		
+		//System.out.println(selectBestParents(populations, fitnessPop, 10));
+		//System.out.println(selectBestParents(populations, fitnessPop, 10));
+		
+		
+		//10.000 evaluation allowed
 		while(evals<evaluations_limit_){
 			
 			// Select parents
+			
+			
+			
 			int parentID = rnd_.nextInt(popSize);
 			
 			// Apply crossover / mutation operators
@@ -108,8 +202,6 @@ public class player44 implements ContestSubmission
 			}
 			
 			double child[] = genes;
-			
-			
 			//double child[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
 			
 			
@@ -119,6 +211,8 @@ public class player44 implements ContestSubmission
 			evals++;
 			// Select survivors
 		}
+		System.out.println(evals);
+		//System.out.println(fitnessPop[0]);
 
 	}
 }
