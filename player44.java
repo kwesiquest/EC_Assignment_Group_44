@@ -20,8 +20,6 @@ public class player44 implements ContestSubmission
 
 	public static void main(String[] args) {
 		System.out.println("Start");
-		System.out.println(Double.doubleToRawLongBits(2D));
-		System.out.println(Long.toBinaryString(Double.doubleToRawLongBits(20D)));
 		player44 player44Object = new player44();
 		player44Object.run();
 	}
@@ -57,52 +55,67 @@ public class player44 implements ContestSubmission
 
 	public double bentCigarFunction(double phenotype[], int dimensions){
 		double result = 0;
-		result += Math.pow(phenotype[0],2);
-		double sum = 0;
-		for(int i = 1; i < dimensions ; i++) {
-			sum += Math.pow(phenotype[i],2);
-			//System.out.println(sum);
-		}
-		sum *= (Math.pow(10, 6));
 		
-		return result + sum;
+		//This for loop calculates what is inside the summation sign
+		for(int i = 1; i < dimensions ; i++) {
+			result += Math.pow(phenotype[i],2);
+		}
+		//10^6 * result of summation sum
+		result *= Math.pow(10, 6);
+		
+		//+ left side of function (x1^2)
+		result +=  Math.pow(phenotype[0],2);
+		
+		return result;
 	}
 
 	public void run()
 	{
 		// Run your algorithm here
-
 		int evals = 0;
+		
 		// init population
-
-
-
 		int popSize = 100;
 		int dimensions = 10;
 		double populations[][] = new double[popSize][dimensions];
 
+		//generate random values for each dimension for each individual between [-5, 5]
 		for (int i = 0; i < popSize; i++) {
 			for (int j = 0; j < dimensions; j++) {
-				populations[i][j] = 5 - rnd_.nextDouble() * 10;
-
+				populations[i][j] = -5 + rnd_.nextDouble() * 10;
 			}
-			System.out.println(populations[i]);
-
 		}
-
+		
+		// calculate fitness
 		double fitnessPop[] = new double[popSize];
 		for (int i = 0; i < popSize; i++) {
 			fitnessPop[i] = bentCigarFunction(populations[i], dimensions);
-			//System.out.println(fitnessPop[i]);
 		}
-
-		// calculate fitness
+		
 		while(evals<evaluations_limit_){
+			
 			// Select parents
+			int parentID = rnd_.nextInt(popSize);
+			
 			// Apply crossover / mutation operators
-			double child[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+			double genes[] = populations[parentID].clone();
+			
+			for(int i = 0; i < genes.length; i++) {
+				double chanceToMutateOneAllele = rnd_.nextDouble();
+				if (chanceToMutateOneAllele < 0.05) {
+					genes[i] = -5 + rnd_.nextDouble() * 10;
+				}
+			}
+			
+			double child[] = genes;
+			
+			
+			//double child[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+			
+			
 			// Check fitness of unknown fuction
 			Double fitness = (double) evaluation_.evaluate(child);
+			System.out.println(fitness);
 			evals++;
 			// Select survivors
 		}
