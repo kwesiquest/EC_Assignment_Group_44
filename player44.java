@@ -1,4 +1,4 @@
-
+package ec;
 import org.vu.contest.ContestSubmission;
 
 import org.vu.contest.ContestEvaluation;
@@ -74,11 +74,31 @@ public class player44 implements ContestSubmission
 	
 	
 	
-	public double[][] oneCutCrossOver(double [][] parents, int dimensions){
+	public double[][] onePointCrossOver(double [][] parents){
+		//parents[0].length already provides dimensions
+		int dimensions = parents[0].length; //is 10
 		
+		//Draw a random integer which will signify AFTER which dimension we will be cutting
+		//So if random integer = 2, you cut between 2 and 3.
+		//This means the random integer can take values between 0 to 8, as a 9 will cut behind the 9 which is null
+		int cutBehindThisDimension = rnd_.nextInt(dimensions - 1);
 		
+		double children[][] = new double[2][dimensions]; //For now we create two children
 		
-		return parents;
+		//Child 0 gets the first cutBehindThisDimensions number of dimensions from parent 0
+		//While child 1 gets the first cutBehindThisDimensions number of dimensions from parent 1
+		for (int i = 0; i < cutBehindThisDimension; i++) {
+			children[0][i] = parents[0][i];
+			children[1][i] = parents[1][i];
+		}
+		
+		//Child 0 gets the rest of his dimensions from parent 1
+		//Child 1 gets the rest of his dimensions from parent 0
+		for (int i = cutBehindThisDimension; i < dimensions; i++) {
+			children[0][i] = parents[1][i]; //Note the parents are switched
+			children[1][i] = parents[0][i]; //Note the parents are switched
+		}
+		return children;
 	}
 	
 	
@@ -138,41 +158,56 @@ public class player44 implements ContestSubmission
 	
 	
 	
-
+	// Run your algorithm here
 	public void run()
 	{
-		// Run your algorithm here
+		//	Number of evaluations done on individuals till now
+		//	Program will stop at 10.000 evaluations
 		int evals = 0;
 		
-		// init population
+		// Initialise population
 		int popSize = 100;
-		int dimensions = 10;
-		double populations[][] = new double[popSize][dimensions];
+		int dimensions = 10; //	All functions take 10 input variables, so 10 dimensions
+		
+		// Create the array which will hold all the individuals and their respective genotype/phenotype
+		double populations[][] = new double[popSize][dimensions]; 
 
-		//generate random values for each dimension for each individual between [-5, 5]
+		// Generate random values for each dimension for each individual between [-5, 5]
 		for (int i = 0; i < popSize; i++) {
 			for (int j = 0; j < dimensions; j++) {
 				populations[i][j] = -5 + rnd_.nextDouble() * 10;
 			}
 		}
 		
-		// calculate fitness
+		// Calculate fitness of all the individuals in the population
 		double fitnessPop[] = new double[popSize];
 		for (int i = 0; i < popSize; i++) {
-			fitnessPop[i] = rnd_.nextDouble();//(double) evaluation_.evaluate(populations[i]);//bentCigarFunction(populations[i], dimensions);
+			fitnessPop[i] = rnd_.nextDouble();//(double) evaluation_.evaluate(populations[i]);
 			evals++;
 		}
-		int[] parents = returnFittestIndividualIDs(populations, fitnessPop, 10);
+		int[] fittestIndividuals = returnFittestIndividualIDs(populations, fitnessPop, 10);
 		
 		//How do you instantiate a list from an array? is possible in other languages :thinking:
-		List<Integer> myList = new ArrayList<>();
-		for (int i = 0; i < parents.length; i++) {
-			myList.add(parents[i]);
+		List<Integer> fittestIndividualsList = new ArrayList<>();
+		for (int i = 0; i < fittestIndividuals.length; i++) {
+			fittestIndividualsList.add(fittestIndividuals[i]);
 		}
 		
-		for (int i = 0; i < myList.size(); i++) {
-			int popthis = rnd_.nextInt(myList.size());
-			myList.remove(popthis);
+		int numberOfParentsPerOffspring = 2;
+		
+		double parents[][] = new double[numberOfParentsPerOffspring][dimensions];
+		//While valid group of parents can be found
+		while (fittestIndividualsList.size() >= numberOfParentsPerOffspring) {
+			
+			//Get which individuals will bare this loop's child
+			for (int i = 0; i < numberOfParentsPerOffspring; i++) {
+				int popthis = rnd_.nextInt(fittestIndividualsList.size());
+				int individualID = fittestIndividualsList.remove(popthis);
+				parents[i] = populations[individualID];
+			}
+			
+			//Make two children from the two parents
+			double children[][] = onePointCrossOver(parents);
 		}
 		
 		
@@ -181,7 +216,7 @@ public class player44 implements ContestSubmission
 		//System.out.println(selectBestParents(populations, fitnessPop, 10));
 		//System.out.println(selectBestParents(populations, fitnessPop, 10));
 		
-		
+		//use CMA-ES says teacher
 		//10.000 evaluation allowed
 		while(evals<evaluations_limit_){
 			
