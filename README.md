@@ -1,6 +1,6 @@
 # EC_Assignment_Group_44
 
-### step 0: copy files into assignmentfiles_2017
+### step 0: copy files (player44.java, Individual.java, Population.java) into assignmentfiles_2017
 
 ### step 1: Paste in cmd
 javac -cp contest.jar player44.java Population.java Individual.java
