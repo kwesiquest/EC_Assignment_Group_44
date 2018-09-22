@@ -11,6 +11,12 @@ jar cmf MainCLass.txt submission.jar player44.class Population.class Individual.
 ### step 3: Paste in cmd
 java -jar testrun.jar -submission=player44 -evaluation=BentCigarFunction -seed=1
 
+### For Windows extra step ###
+jar uf contest.jar myadditionalclass.class 
+
+
+
+
 
 Evolutionary Algorithm Cycle:
 
