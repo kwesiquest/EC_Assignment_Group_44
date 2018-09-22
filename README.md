@@ -11,3 +11,22 @@ jar cmf MainCLass.txt submission.jar player44.class Population.class Individual.
 ### step 3: Paste in cmd
 java -jar testrun.jar -submission=player44 -evaluation=BentCigarFunction -seed=1
 
+
+Evolutionary Algorithm Cycle:
+
+Initialise population
+Determine fitness of all individuals in this population
+
+while(programrunning = true){
+  
+  Select parents who you wish to make children with
+  
+  Make child(ren) from those selected parents by mixing parent's genotype together
+  
+  Mutate children by altering their genotype
+  
+  Determine fitness of all the new children
+  
+  Determine which individuals of the population (or children) you wish to keep
+  
+}
