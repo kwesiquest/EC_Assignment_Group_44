@@ -8,15 +8,7 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.List;
 import java.lang.Math;
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+import java.lang.reflect.Array;
 
 public class player44 implements ContestSubmission
 {
@@ -29,63 +21,6 @@ public class player44 implements ContestSubmission
 		rnd_ = new Random();
 	}
 
-//	private class Individual{
-//
-//		//VARIABLES
-//		public double[] x;
-//		public double fitnessVal;
-//		private final double LOWERBOUND = -5;
-//		private final double UPPERBOUND = 5;
-//
-//
-//		//CONSTRUCTOR
-//		public Individual(double[] x) {
-//			this.x = x;
-//			this.fitnessVal = 0.;
-//		}
-//
-//
-//		//METHODS
-//		public double getFitness() {
-//			return this.fitnessVal;
-//		}
-//
-//		public void setFitness(double fitness) {
-//			this.fitnessVal = fitness;
-//		}
-//	}
-//
-//
-//	private class Population{
-//
-//		//VARIABLES
-//		public int popSize;
-//		private final int DIMENSIONS = 10;
-//		private List<Individual> population;
-//		//private Random rnd;
-//
-//
-//		//CONSTRUCTOR
-//		public Population(int popSize) {
-//			this.popSize = popSize;	
-//		}
-//
-//
-//		//METHODS
-//		public void populate(Random rnd) {
-//			for (int i = 0; i < this.popSize; i++) {					//FOR ALL INDIVIDUALS
-//				double[] randomValues = new double[DIMENSIONS];			//INITIATE RANDOM X ARRAY WITH CORRECT DIMENSIONS
-//				for (int j = 0; j < DIMENSIONS; j++) {					//CREATE RANDOM X VALUES
-//					randomValues[j] = -5 + rnd.nextDouble() * 10;		//ASSIGN VALUES TO EACH POSITION IN ARRAY
-//				}
-//				Individual newInd = new Individual(randomValues);		//CREATE NEW INDIVIDUAL WITH RANDOM X VALUES
-//				this.population.add(newInd);							//ADD INDIVIDUAL TO POPULATION
-//				System.out.println(population.size());
-//			}
-//		}
-//	}
-
-
 	public static void main(String[] args) {
 		System.out.println("Start");
 		player44 player44Object = new player44();
@@ -94,7 +29,7 @@ public class player44 implements ContestSubmission
 
 	public void setSeed(long seed)
 	{
-		// Set seed of algortihms random process
+		// Set seed of algorithms random process
 		rnd_.setSeed(seed);
 	}
 
@@ -123,201 +58,144 @@ public class player44 implements ContestSubmission
 
 	public double bentCigarFunction(double phenotype[], int dimensions){
 		double result = 0;
-
+		
 		//This for loop calculates what is inside the summation sign
 		for(int i = 1; i < dimensions ; i++) {
 			result += Math.pow(phenotype[i],2);
 		}
 		//10^6 * result of summation sum
 		result *= Math.pow(10, 6);
-
+		
 		//+ left side of function (x1^2)
 		result +=  Math.pow(phenotype[0],2);
-
+		
 		return result;
 	}
-
-
-
-	public double[][] onePointCrossOver(double [][] parents){
+	
+	
+	
+	public List<Individual> onePointCrossOver(Individual[] parents){
 		//parents[0].length already provides dimensions
-		int dimensions = parents[0].length; //is 10
-
+		int dimensions = parents[0].getDimensionsCount(); //is 10
+		
 		//Draw a random integer which will signify AFTER which dimension we will be cutting
 		//So if random integer = 2, you cut between 2 and 3.
 		//This means the random integer can take values between 0 to 8, as a 9 will cut behind the 9 which is null
 		int cutBehindThisDimension = rnd_.nextInt(dimensions - 1);
-
-		double children[][] = new double[2][dimensions]; //For now we create two children
-
+		
+		//Lets create the childrens genotype
+		double genotype[][] = new double[2][dimensions];
+		
 		//Child 0 gets the first cutBehindThisDimensions number of dimensions from parent 0
 		//While child 1 gets the first cutBehindThisDimensions number of dimensions from parent 1
 		for (int i = 0; i < cutBehindThisDimension; i++) {
-			children[0][i] = parents[0][i];
-			children[1][i] = parents[1][i];
+			genotype[0][i] = parents[0].getAlleleAtDim(i);
+			genotype[1][i] = parents[1].getAlleleAtDim(i);
 		}
-
+		
 		//Child 0 gets the rest of his dimensions from parent 1
 		//Child 1 gets the rest of his dimensions from parent 0
 		for (int i = cutBehindThisDimension; i < dimensions; i++) {
-			children[0][i] = parents[1][i]; //Note the parents are switched
-			children[1][i] = parents[0][i]; //Note the parents are switched
+			genotype[1][i] = parents[1].getAlleleAtDim(i); //Note the parents are switched
+			genotype[1][i] = parents[0].getAlleleAtDim(i); //Note the parents are switched
+		}
+		
+		//Instantiate child
+		List <Individual> children = new ArrayList<Individual>();
+		for (int i = 0; i < genotype.length; i++) {
+			children.add(new Individual(genotype[i]));
 		}
 		return children;
 	}
-
-
-	//Returns the IDs of the fittest individuals, note that individuals towards the end of the array are most fittest.
-	public int[] returnFittestIndividualIDs(double[][] populations, double fitnessPop[],int numberOfParentsToSelect){
-
-		int[] topfitnessindividualsarray = new int[numberOfParentsToSelect]; //Stores id's of fit individuals
-		double[] topfitnesvaluessarray = new double[numberOfParentsToSelect]; //Stores fitness scores of fit individuals
-		double lowestValue = 0; //As fitness is 0 to 10.
-		for (int i = 0; i < fitnessPop.length; i++) {
-
-			if( fitnessPop[i] > lowestValue) {
-
-				//So we will be inserting this
-
-				for (int j = 0; j < topfitnesvaluessarray.length; j++) {
-
-					if (fitnessPop[i] > topfitnesvaluessarray[j]) {
-
-						if (j == 0) { 
-
-							//This value falls of the left of the array
-
-						}
-						else if ( j == 9) {
-
-							topfitnesvaluessarray[j-1] = topfitnesvaluessarray[j];
-							topfitnesvaluessarray[j] = fitnessPop[i];
-
-							topfitnessindividualsarray[j-1] = topfitnessindividualsarray[j];
-							topfitnessindividualsarray[j] = i;
-
-						}
-						else {
-
-							topfitnesvaluessarray[j-1] = topfitnesvaluessarray[j];
-
-							topfitnessindividualsarray[j-1] = topfitnessindividualsarray[j];
-
-						}
-
-					}
-					else { //fitness of to insert element is lower than current array element
-
-						topfitnesvaluessarray[j-1] = fitnessPop[i]; //Settle in previous slot
-
-						topfitnessindividualsarray[j-1] = i;
-
-						j = 10;
-					}		
-					lowestValue = topfitnesvaluessarray[0];
-				}
+	
+	public void uniformMutation(Individual child){
+		
+		double[] genotype = child.getGenotype();
+		int dimensions = genotype.length; //is 10
+		float chance = 1.0f / dimensions; //is 0.1
+		
+		//	All dimensions/alleles have an equal chance (10%) to mutate
+		int mutationsReceived = 0;
+		for (int i = 0; i < dimensions; i++) {
+			if (rnd_.nextFloat() < chance) {
+				genotype[i] = -5 + rnd_.nextDouble() * 10;
+				mutationsReceived++;
 			}
 		}
-		return topfitnessindividualsarray;
 	}
+	
 
-
-
+	private Population setup(int popSize, int dimensions) {
+		Population population = new Population(popSize = 100);
+		population.initialiseNewRandomPopulation(rnd_);
+		
+		// Generate random values for each dimension for each individual between [-5, 5]
+		for (int i = 0; i < population.getPopSize(); i++) {
+			
+			Individual individual = population.getIndividualAtIndex(i); 
+			double genotype[] = individual.getGenotype();
+			//individual.setFitness((double) evaluation_.evaluate(genotype));  
+			individual.setFitness((double) evaluation_.evaluate(individual.getGenotype()));
+		}
+		return population;
+	}
+	
+	
 	// Run your algorithm here
 	public void run()
 	{
-
-		Population popTest = new Population(100);
-		//popTest.populate(rnd_);
-
-
-//		//	Number of evaluations done on individuals till now
-//		//	Program will stop at 10.000 evaluations
-		int evals = 0;
-//
-//		// Initialise population
-//		int popSize = 100;
-//		int dimensions = 10; //	All functions take 10 input variables, so 10 dimensions
-//
-//		// Create the array which will hold all the individuals and their respective genotype/phenotype
-//		double populations[][] = new double[popSize][dimensions]; 
-//
-//		// Generate random values for each dimension for each individual between [-5, 5]
-//		for (int i = 0; i < popSize; i++) {
-//			for (int j = 0; j < dimensions; j++) {
-//				populations[i][j] = -5 + rnd_.nextDouble() * 10;
-//			}
-//		}
-//
-//		// Calculate fitness of all the individuals in the population
-//		double fitnessPop[] = new double[popSize];
-//		for (int i = 0; i < popSize; i++) {
-//			fitnessPop[i] = rnd_.nextDouble();//(double) evaluation_.evaluate(populations[i]);
-//			evals++;
-//		}
-//		int[] fittestIndividuals = returnFittestIndividualIDs(populations, fitnessPop, 10);
-//
-//		//How do you instantiate a list from an array? is possible in other languages :thinking:
-//		List<Integer> fittestIndividualsList = new ArrayList<>();
-//		for (int i = 0; i < fittestIndividuals.length; i++) {
-//			fittestIndividualsList.add(fittestIndividuals[i]);
-//		}
-//
-//		int numberOfParentsPerOffspring = 2;
-//
-//		double parents[][] = new double[numberOfParentsPerOffspring][dimensions];
-//		//While valid group of parents can be found
-//		while (fittestIndividualsList.size() >= numberOfParentsPerOffspring) {
-//
-//			//Get which individuals will bare this loop's child
-//			for (int i = 0; i < numberOfParentsPerOffspring; i++) {
-//				int popthis = rnd_.nextInt(fittestIndividualsList.size());
-//				int individualID = fittestIndividualsList.remove(popthis);
-//				parents[i] = populations[individualID];
-//			}
-//
-//			//Make two children from the two parents
-//			double children[][] = onePointCrossOver(parents);
-//		}
-//
-//
-//
-//
-//		//System.out.println(selectBestParents(populations, fitnessPop, 10));
-//		//System.out.println(selectBestParents(populations, fitnessPop, 10));
-//
-//		//use CMA-ES says teacher
-//		//10.000 evaluation allowed
+		int popSize = 100;
+		int dimensions = 10; //	All functions take 10 input variables, so 10 dimensions
+		Population population = setup(popSize, dimensions);
+		int evals = popSize; // As every new individual of the newly formed population had to be evaluated
+		
 		while(evals<evaluations_limit_){
-
-			// Select parents
-
-
-
-			//int parentID = rnd_.nextInt(popSize);
-
-			// Apply crossover / mutation operators
-			//double genes[] = populations[parentID].clone();
-
-//			for(int i = 0; i < genes.length; i++) {
-//				double chanceToMutateOneAllele = rnd_.nextDouble();
-//				if (chanceToMutateOneAllele < 0.05) {
-//					genes[i] = -5 + rnd_.nextDouble() * 10;
-//				}
-//			}
-
+			
+			//	Parent selection
+			//	First we see who are the fittest individuals
+			List<Individual> fittestIndividuals = population.GetFittestIndividuals(10);
+			
+			//	Ok, so who will breed with who
+			int numberOfParentsPerOffspring = 2;
+			Individual parents[] = new Individual[numberOfParentsPerOffspring];
+			List<Individual> children = new ArrayList<Individual>();
+			////While valid group of parents can be found
+			while (fittestIndividuals.size() >= numberOfParentsPerOffspring) {
+				
+				//Get which individuals will bare this loop's child
+				for (int i = 0; i < numberOfParentsPerOffspring; i++) {
+					int popthis = rnd_.nextInt(fittestIndividuals.size());
+					parents[i] = fittestIndividuals.remove(popthis);
+				}
+				
+				//	Make two children from the two parents
+				List<Individual> newChildren = onePointCrossOver(parents); 
+				
+				//	Add the children found in this iteration to the collection of children
+				children.addAll(newChildren);	
+			}
+			
+			
+			
+			//	Apply (potential) mutation to the children, one child at a time
+			for (int i = 0; i < children.size(); i++) {
+				uniformMutation(children.get(i));
+				children.get(i).setFitness((double) evaluation_.evaluate(children.get(i).getGenotype()));
+				evals++;
+			}
+			
+			
+			List<Individual> ok = population.GetWorstIndividuals(10);
+			population.removeIndividuals(ok);
+			population.addIndividuals(children);
+			
 			//double child[] = genes;
-			double child[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
-
-
+			//double child[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+			
 			// Check fitness of unknown fuction
-			Double fitness = (double) evaluation_.evaluate(child);
-			//System.out.println(fitness);
-			evals++;
+			//Double fitness = (double) evaluation_.evaluate(child);
+			//evals++;
 			// Select survivors
 		}
-		//System.out.println(evals);
-		//System.out.println(fitnessPop[0]);
-
 	}
 }

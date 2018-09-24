@@ -1,18 +1,35 @@
 public class Individual{
 
 	//VARIABLES
-	public double[] x;
-	public double fitnessVal;
+	private double[] genotype;
+	private int dimensions;
+	private double fitnessVal;
 	private final double LOWERBOUND = -5;
 	private final double UPPERBOUND = 5;
 
 
 	//CONSTRUCTOR
-	public Individual(double[] x) {
-		this.x = x;
+	public Individual(double[] genotype) {
+		this.genotype = genotype;
+		this.dimensions = genotype.length;
 		this.fitnessVal = 0.;
 	}
+	
+	public double[] getGenotype() {
+		return this.genotype;
+	}
 
+	public int getDimensionsCount() {
+		return this.dimensions;
+	}
+	
+	public double getAlleleAtDim(int dim) {
+		return this.genotype[dim];
+	}
+	
+	public void setAlleleAtDim(int dim, double newAlleleValue) {
+		genotype[dim] = newAlleleValue;
+	}
 
 	//METHODS
 	public double getFitness() {
