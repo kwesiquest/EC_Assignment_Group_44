@@ -5,14 +5,17 @@
 ### step 1: Paste in cmd
 javac -cp contest.jar player44.java Population.java Individual.java
 
+### For Windows extra step ###
+jar uf contest.jar Individual.class 
+jar uf contest.jar Population.class 
+
 ### step 2: Paste in cmd
 jar cmf MainCLass.txt submission.jar player44.class Population.class Individual.class
 
 ### step 3: Paste in cmd
 java -jar testrun.jar -submission=player44 -evaluation=BentCigarFunction -seed=1
 
-### For Windows extra step ###
-jar uf contest.jar myadditionalclass.class 
+
 
 
 
