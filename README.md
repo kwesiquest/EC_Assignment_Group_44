@@ -16,6 +16,8 @@ jar cmf MainCLass.txt submission.jar player44.class Population.class Individual.
 java -jar testrun.jar -submission=player44 -evaluation=BentCigarFunction -seed=1
 
 
+# https://docs.google.com/document/d/1BEhSlbOyf5n7zEDs93WLa7zZ0y41FEYdjFyq24QEm_I/edit
+
 
 
 
