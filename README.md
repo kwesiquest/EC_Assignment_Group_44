@@ -13,7 +13,7 @@ jar uf contest.jar Population.class
 jar cmf MainCLass.txt submission.jar player44.class Population.class Individual.class
 
 ### step 3: Paste in cmd
-java -jar testrun.jar -submission=player44 -evaluation=BentCigarFunction -seed=1
+java -jar testrun.jar >storeresults.txt -submission=player44 -evaluation=BentCigarFunction -seed=1
 
 
 # https://docs.google.com/document/d/1BEhSlbOyf5n7zEDs93WLa7zZ0y41FEYdjFyq24QEm_I/edit
