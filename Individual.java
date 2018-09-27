@@ -15,6 +15,7 @@ public class Individual{
 		this.fitnessVal = 0.;
 	}
 	
+	//METHODS
 	public double[] getGenotype() {
 		return this.genotype;
 	}
@@ -31,7 +32,6 @@ public class Individual{
 		genotype[dim] = newAlleleValue;
 	}
 
-	//METHODS
 	public double getFitness() {
 		return this.fitnessVal;
 	}

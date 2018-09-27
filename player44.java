@@ -109,7 +109,6 @@ public class player44 implements ContestSubmission
 	}
 	
 	public void uniformMutation(Individual child){
-		
 		double[] genotype = child.getGenotype();
 		int dimensions = genotype.length; //is 10
 		float chance = 1.0f / dimensions; //is 0.1
@@ -124,14 +123,12 @@ public class player44 implements ContestSubmission
 		}
 	}
 	
-
 	private Population setup(int popSize, int dimensions) {
 		Population population = new Population(popSize = 100);
 		population.initialiseNewRandomPopulation(rnd_);
 		
 		// Generate random values for each dimension for each individual between [-5, 5]
 		for (int i = 0; i < population.getPopSize(); i++) {
-			
 			Individual individual = population.getIndividualAtIndex(i); 
 			double genotype[] = individual.getGenotype();
 			//individual.setFitness((double) evaluation_.evaluate(genotype));  
@@ -148,13 +145,14 @@ public class player44 implements ContestSubmission
 		int dimensions = 10; //	All functions take 10 input variables, so 10 dimensions
 		Population population = setup(popSize, dimensions);
 		int evals = popSize; // As every new individual of the newly formed population had to be evaluated
+		int numberOfParentsToSelect = 26;
 		
 		while(evals<evaluations_limit_){
 			
 			//	Parent selection
 			//	First we see who are the fittest individuals
-			List<Individual> fittestIndividuals = population.GetFittestIndividuals(10);
-			
+			//List<Individual> fittestIndividuals = population.UniformParentSelection(numberOfParentsToSelect, rnd_);
+			List<Individual> fittestIndividuals = population.GetFittestIndividuals(numberOfParentsToSelect);
 			//	Ok, so who will breed with who
 			int numberOfParentsPerOffspring = 2;
 			Individual parents[] = new Individual[numberOfParentsPerOffspring];
@@ -182,12 +180,18 @@ public class player44 implements ContestSubmission
 				uniformMutation(children.get(i));
 				children.get(i).setFitness((double) evaluation_.evaluate(children.get(i).getGenotype()));
 				evals++;
+				if (evals == evaluations_limit_){
+					return;
+				}
 			}
 			
-			
-			List<Individual> ok = population.GetWorstIndividuals(10);
+			//always even
+			List<Individual> ok = population.GetWorstIndividuals(children.size());
 			population.removeIndividuals(ok);
+			System.out.println(population.getPopSize());
 			population.addIndividuals(children);
+			System.out.println(population.getPopSize());
+			
 			
 			//double child[] = genes;
 			//double child[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
