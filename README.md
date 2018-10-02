@@ -13,7 +13,7 @@ jar uf contest.jar Mutation.class
 jar uf contest.jar SelectionMethods.class 
 
 ### step 2: Paste in cmd
-jar cmf MainCLass.txt submission.jar player44.class Population.class Individual.class CrossOver.class Mutation.class SelectionMethods.class
+jar cmf MainClass.txt submission.jar player44.class Population.class Individual.class CrossOver.class Mutation.class SelectionMethods.class
 
 ### step 3: Paste in cmd
 java -jar testrun.jar >storeresults.txt -submission=player44 -evaluation=BentCigarFunction -seed=1
