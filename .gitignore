@@ -1,0 +1,12 @@
+# folders
+javabbob/
+tmp/
+.metadata/
+
+# file types
+*.class
+*.dll
+*.dylib
+*.jar
+*.txt
+*.so
