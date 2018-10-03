@@ -1,4 +1,4 @@
-javac -cp contest.jar player44.java Population.java Individual.java CrossOver.java Mutation.java SelectionMethods.java
+javac -cp contest.jar;"commons-math3-3.6.1.jar" player44.java Population.java Individual.java CrossOver.java Mutation.java SelectionMethods.java
 
 jar uf contest.jar Individual.class
 jar uf contest.jar Population.class
