@@ -1,4 +1,3 @@
-#!/bin/bash
 for i in {1..100}
 do
    javac -cp contest.jar player44.java CrossOver.java Individual.java Mutation.java Population.java SelectionMethods.java
