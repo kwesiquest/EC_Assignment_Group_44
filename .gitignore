@@ -2,6 +2,7 @@
 javabbob/
 tmp/
 .metadata/
+.ipynb_checkpoints/
 
 # file types
 *.class
@@ -10,3 +11,4 @@ tmp/
 *.jar
 *.txt
 *.so
+
