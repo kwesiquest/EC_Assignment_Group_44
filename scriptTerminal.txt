@@ -3,7 +3,7 @@ for i in {1..100}
 do
    javac -cp contest.jar player44.java CrossOver.java Individual.java Mutation.java Population.java SelectionMethods.java
    jar cmf MainClass.txt submission.jar player44.class CrossOver.class Individual.class Mutation.class Population.class SelectionMethods.class
-   java -jar testrun.jar -submission=player44 -evaluation=SphereEvaluation -seed=1 > results/storeresults"$i".txt
+   java -jar testrun.jar -submission=player44 -evaluation=SphereEvaluation -seed=1 > analyze_results/storeresults"$i".txt
 done
 
 
