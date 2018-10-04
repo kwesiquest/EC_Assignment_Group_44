@@ -1,9 +1,10 @@
 # folders
 javabbob/
 tmp/
-.metadata/
+venv/
 .idea/
 .ipynb_checkpoints/
+.metadata/
 
 # file types
 *.class
