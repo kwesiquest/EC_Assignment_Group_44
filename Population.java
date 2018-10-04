@@ -1,12 +1,14 @@
+//popSize public gemaakt voor selection methods 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.lang.Math;
 
 public class Population{
 
 	//VARIABLES
-	private int popSize;
+	public int popSize; 
 	private final int DIMENSIONS = 10;
 	private List<Individual> population;
 
@@ -16,134 +18,10 @@ public class Population{
 	}
 
 	//METHODS
-
-	public List<Individual> UniformParentSelection(int numberOfParentsToSelect, Random rnd){
-		List<Individual> result = new ArrayList<Individual>();
-
-		List<Integer> selection = new ArrayList<Integer>();
-		for (int i = 0; i<this.popSize; i++) {
-			selection.add(i);
-		}
-
-		for(int i=0; i<numberOfParentsToSelect; i++) {
-			int a = rnd.nextInt(selection.size());
-			int b = selection.remove(a);
-
-			result.add(getIndividualAtIndex(b));
-
-		}
-		return result;
-	}
-
-
-	public List<Individual> GetFittestIndividuals(int numberOfParentsToSelect){
-
-		//	Both topfitness arrays will sort by fittest at the end of the array
-		int[] topfitnessindividualsarray = new int[numberOfParentsToSelect]; //Stores id's of fit individuals
-		double[] topfitnesvaluessarray = new double[numberOfParentsToSelect]; //Stores fitness scores of fit individuals
-		double lowestValue = 0; //As fitness is 0 to 10.
-		for (int i = 0; i < popSize; i++) {
-
-			Individual currIndividual = getIndividualAtIndex(i);
-			double currFitness = currIndividual.getFitness();
-
-			if( currFitness > lowestValue) {
-				//So we will be inserting this individual into top 10 cause its fitness is higher than one or more of the current top 10
-				for (int j = 0; j < topfitnesvaluessarray.length; j++) {
-					if (currFitness > topfitnesvaluessarray[j]) { //fitness of to insert element is higher than current array element
-						if (j == 0) { 
-							//This value falls of the left of the array
-							//No need to adjust it as the next cycle will replace this value anyway
-						}
-						else if ( j == numberOfParentsToSelect - 1) { //This new to insert value is the highest we have seen till now. So insert it at the end of array
-
-							topfitnesvaluessarray[j-1] = topfitnesvaluessarray[j];
-							topfitnesvaluessarray[j] = currFitness;
-
-							topfitnessindividualsarray[j-1] = topfitnessindividualsarray[j];
-							topfitnessindividualsarray[j] = i;
-						}
-						else { 
-							topfitnesvaluessarray[j-1] = topfitnesvaluessarray[j];
-							topfitnessindividualsarray[j-1] = topfitnessindividualsarray[j];
-						}
-					}
-					else { //fitness of to insert element is lower than current array element
-						topfitnesvaluessarray[j-1] = currFitness; //Settle in previous slot
-						topfitnessindividualsarray[j-1] = i;
-						j = numberOfParentsToSelect; //End the for loop for this
-					}		
-					lowestValue = topfitnesvaluessarray[0];
-				}
-			}
-		}
-
-		//	Gather the fittest individuals in a list and return it.
-		//	List is sorted from fittest to fit (highest fitness value at [0].
-		List<Individual> fittestIndividuals = new ArrayList<Individual>();
-		for (int i = topfitnessindividualsarray.length - 1; i > -1; i--) {
-			fittestIndividuals.add(getIndividualAtIndex(topfitnessindividualsarray[i]));
-		}
-		return fittestIndividuals;
-	}
-
-	public List<Individual> GetWorstIndividuals(int count){
-
-		//	Both topfitness arrays will sort by fittest at the end of the array
-		int[] topfitnessindividualsarray = new int[count]; //Stores id's of fit individuals
-		double[] topfitnesvaluessarray = new double[count]; //Stores fitness scores of fit individuals
-		for (int i = 0; i < topfitnesvaluessarray.length; i++) {
-			topfitnesvaluessarray[i] = 11;
-		}
-		double highestValue = 11; //As fitness is 0 to 10.
-		for (int i = 0; i < popSize; i++) {
-
-			Individual currIndividual = getIndividualAtIndex(i);
-			double currFitness = currIndividual.getFitness();
-
-			if( currFitness < highestValue) {
-				//So we will be inserting this individual into top 10 cause its fitness is higher than one or more of the current top 10
-				for (int j = 0; j < topfitnesvaluessarray.length; j++) {
-					if (currFitness < topfitnesvaluessarray[j]) { //fitness of to insert element is higher than current array element			
-						if (j == 0) { 
-							//This value falls of the left of the array
-							//No need to adjust it as the next cycle will replace this value anyway		
-						}
-						else if ( j == count - 1) { //This new to insert value is the highest we have seen till now. So insert it at the end of array
-
-							topfitnesvaluessarray[j-1] = topfitnesvaluessarray[j];
-							topfitnesvaluessarray[j] = currFitness;
-
-							topfitnessindividualsarray[j-1] = topfitnessindividualsarray[j];
-							topfitnessindividualsarray[j] = i;
-						}
-						else { 
-
-							topfitnesvaluessarray[j-1] = topfitnesvaluessarray[j];
-							topfitnessindividualsarray[j-1] = topfitnessindividualsarray[j];
-						}
-					}
-					else { //fitness of to insert element is lower than current array element
-						topfitnesvaluessarray[j-1] = currFitness; //Settle in previous slot
-
-						topfitnessindividualsarray[j-1] = i;
-
-						j = count; //End the for loop for this
-					}		
-					highestValue = topfitnesvaluessarray[0];
-				}
-			}
-		}
-
-
-		//	Gather the fittest individuals in a list and return it.
-		//	List is sorted from fittest to fit (highest fitness value at [0].
-		List<Individual> fittestIndividuals = new ArrayList<Individual>();
-		for (int i = topfitnessindividualsarray.length - 1; i > -1; i--) {
-			fittestIndividuals.add(getIndividualAtIndex(topfitnessindividualsarray[i]));
-		}
-		return fittestIndividuals;
-	}
+	// initialise
+	// get fittest individuals
+	// get worst individuals
+		
 
 	public void initialiseNewRandomPopulation(Random rnd) {
 		this.population = new ArrayList<Individual>();
@@ -185,5 +63,260 @@ public class Population{
 
 	public int getPopSize() {
 		return this.popSize;
+	}
+
+	public double getStdFitness(){
+		double averageFitness = getAverageFitness();
+		double sumOfDeviances = 0;
+		for (int i = 0; i < popSize; i++){
+			Individual currIndividual = getIndividualAtIndex(i);
+			double fitnessCurrIndividual = currIndividual.getFitness();
+			sumOfDeviances += Math.pow(averageFitness - fitnessCurrIndividual, 2); 
+		}
+		double standardDeviation = Math.sqrt(sumOfDeviances / popSize);
+		return standardDeviation;
+	}
+
+	public double getAverageFitness(){
+		double sumFitness = 0;
+		for (int i = 0; i < popSize; i++) {
+			Individual currIndividual = getIndividualAtIndex(i);
+			double fitnessCurrIndividual = currIndividual.getFitness();
+			sumFitness += fitnessCurrIndividual;
+		}
+
+		double averageFitness = sumFitness / popSize;
+		return averageFitness;
+	}
+	
+	public double getMaxFitness(){
+	double maxFitness = 0;
+	for (int i = 0; i < popSize; i++) {
+		Individual currIndividual = getIndividualAtIndex(i);
+		double fitnessCurrIndividual = currIndividual.getFitness();
+		if (fitnessCurrIndividual > maxFitness){
+			maxFitness = fitnessCurrIndividual;
+		}
+	}
+	return maxFitness;
+	}
+
+	public double cosineSimilarityMax(){
+		double[] genotypeOneIndidivual = new double[DIMENSIONS]; 
+		double[] genotypeOtherIndidivual = new double[DIMENSIONS]; 
+		Individual oneIndividual = new Individual(genotypeOneIndidivual);
+		Individual otherIndividual = new Individual(genotypeOtherIndidivual);
+		double cosineSimilarityMax = 0.0;
+		double cosineSimilarity = 0.0;
+
+		for (int i = 0; i < popSize; i++) {
+			for (int j = 0; j < popSize; j++){
+				oneIndividual = getIndividualAtIndex(i);
+				otherIndividual = getIndividualAtIndex(j);
+				genotypeOneIndidivual = oneIndividual.getGenotype();
+				genotypeOtherIndidivual = otherIndividual.getGenotype();
+				cosineSimilarity = cosineSimilarityMetric(genotypeOneIndidivual, genotypeOtherIndidivual);
+				if (Math.pow(cosineSimilarity, 2) > cosineSimilarityMax && Math.pow(cosineSimilarity, 2) < 1){
+					cosineSimilarityMax = cosineSimilarity;
+				}
+			}
+		}
+
+		return cosineSimilarityMax;
+	}
+	
+	public double getMaxDistance(String metric){
+		double[] genotypeOneIndidivual = new double[DIMENSIONS]; 
+		double[] genotypeOtherIndidivual = new double[DIMENSIONS]; 
+		Individual oneIndividual = new Individual(genotypeOneIndidivual);
+		Individual otherIndividual = new Individual(genotypeOtherIndidivual);
+		double maxDistance = 0.0;
+		double distance = 0.0;
+
+		for (int i = 0; i < popSize; i++) {
+			for (int j = 0; j < popSize; j++){
+				oneIndividual = getIndividualAtIndex(i);
+				otherIndividual = getIndividualAtIndex(j);
+				genotypeOneIndidivual = oneIndividual.getGenotype();
+				genotypeOtherIndidivual = otherIndividual.getGenotype();
+				if (metric.equals("cosine")){
+					distance = 1-(cosineSimilarityMetric(genotypeOneIndidivual, genotypeOtherIndidivual));
+				} else {
+					distance = euclideanDistanceMetric(genotypeOneIndidivual, genotypeOtherIndidivual);
+				}
+				if (distance > maxDistance){
+					maxDistance = distance;
+				}	
+			}
+		}
+
+		return maxDistance;
+	}
+			
+
+	public double cosineSimilarityMin(){
+	double[] genotypeOneIndidivual = new double[DIMENSIONS]; 
+	double[] genotypeOtherIndidivual = new double[DIMENSIONS]; 
+	Individual oneIndividual = new Individual(genotypeOneIndidivual);
+	Individual otherIndividual = new Individual(genotypeOtherIndidivual);
+	double cosineSimilarityMin = 1;
+	double cosineSimilarity = 0.0;
+
+	for (int i = 0; i < popSize; i++) {
+		for (int j = 0; j < popSize; j++){
+			oneIndividual = getIndividualAtIndex(i);
+			otherIndividual = getIndividualAtIndex(j);
+			genotypeOneIndidivual = oneIndividual.getGenotype();
+			genotypeOtherIndidivual = otherIndividual.getGenotype();
+			cosineSimilarity = cosineSimilarityMetric(genotypeOneIndidivual, genotypeOtherIndidivual);
+			if (Math.pow(cosineSimilarity, 2) < cosineSimilarityMin && Math.pow(cosineSimilarity, 2) > 0){
+				cosineSimilarityMin = cosineSimilarity;
+			}
+		}
+	}
+
+	return cosineSimilarityMin;
+}
+
+	public double cosineSimilaritySmallestvsLargest(){
+
+		double[] smallestGenotype = GetSmallestGenotype();
+		double[] largestGenotype = GetLargestGenotype();
+		return cosineSimilarityMetric(smallestGenotype, largestGenotype);
+	}
+
+	private static double cosineSimilarityMetric(double[] vectorA, double[] vectorB) {
+	    double dotProduct = 0.0;
+	    double normA = 0.0;
+	    double normB = 0.0;
+	    for (int i = 0; i < vectorA.length; i++) {
+	        dotProduct += vectorA[i] * vectorB[i];
+	        normA += Math.pow(vectorA[i], 2);
+	        normB += Math.pow(vectorB[i], 2);
+	    }
+
+	    double cosineSimilarity = dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+	    if (cosineSimilarity < 0.001){
+	    	cosineSimilarity = 0.000;
+	    }
+
+
+	    return cosineSimilarity;
+	}
+	
+
+	public double averageEuclideanDistance() {
+		// double[] genotypeOneIndidivual = new double[DIMENSIONS]; 
+		// double[] genotypeOtherIndidivual = new double[DIMENSIONS]; 
+
+		double sumEuclideanDistances = 0;
+		double nDistances = popSize * popSize;
+		// double distance = 0;
+
+		for (int i = 0; i < popSize; i++) {
+			for (int j = 0; j < popSize; j++){
+				Individual oneIndividual = getIndividualAtIndex(i);
+				Individual otherIndividual = getIndividualAtIndex(j);
+				double[] genotypeOneIndidivual = oneIndividual.getGenotype();
+				double[] genotypeOtherIndidivual = otherIndividual.getGenotype();
+				double distance = euclideanDistanceMetric(genotypeOneIndidivual, genotypeOtherIndidivual);
+				sumEuclideanDistances += distance;
+				}
+			}
+	
+		// double average = sumEuclideanDistances / nDistances;
+
+		return sumEuclideanDistances / nDistances;
+	}
+
+
+	public double averageCosineSimilarity() {
+		// double[] genotypeOneIndidivual = new double[DIMENSIONS]; 
+		// double[] genotypeOtherIndidivual = new double[DIMENSIONS]; 
+
+		double sumCosineSimilarities = 0;
+		double nDistances = popSize * popSize;
+		// double distance = 0;
+
+		for (int i = 0; i < popSize; i++) {
+			for (int j = 0; j < popSize; j++){
+				Individual oneIndividual = getIndividualAtIndex(i);
+				Individual otherIndividual = getIndividualAtIndex(j);
+				double[] genotypeOneIndidivual = oneIndividual.getGenotype();
+				double[] genotypeOtherIndidivual = otherIndividual.getGenotype();
+				double similarity = cosineSimilarityMetric(genotypeOneIndidivual, genotypeOtherIndidivual);
+				sumCosineSimilarities += similarity;
+				}
+			}
+		
+		System.out.println(sumCosineSimilarities);
+		// double average = sumEuclideanDistances / nDistances;
+
+		return sumCosineSimilarities / nDistances;
+	}
+
+
+	private static double euclideanDistanceMetric(double[] genotypeA, double[] genotypeB) {
+	    double subtraction = 0.0;
+	    double subtractionSquared = 0.0;
+	    double sumSubtractionsSquared = 0.0;
+	    for (int i = 0; i < genotypeA.length; i++) {
+	        subtraction = (genotypeA[i] - genotypeB[i]);
+	        subtractionSquared = Math.pow(subtraction, 2);
+	        sumSubtractionsSquared = (sumSubtractionsSquared + subtractionSquared);
+	    }
+
+
+	    double distance = Math.sqrt(sumSubtractionsSquared);
+
+	    return distance;
+	}
+
+
+
+	private double[] GetSmallestGenotype(){
+
+		double[] genotypeSmallestIndidivual = new double[DIMENSIONS]; 
+		double sumGenotype = 0;
+		double smallestSumGenotype = 50;
+		for (int i = 0; i < popSize; i++) {
+
+			Individual currIndividual = getIndividualAtIndex(i);
+			double[] genotypeCurrIndividual = currIndividual.getGenotype();
+
+			for(double g:genotypeCurrIndividual){
+				sumGenotype += g;
+			}
+
+			if (sumGenotype < smallestSumGenotype) {
+				smallestSumGenotype = sumGenotype;
+				genotypeSmallestIndidivual = genotypeCurrIndividual;
+			}
+		}
+		
+		return genotypeSmallestIndidivual;
+	}
+	
+	private double[] GetLargestGenotype(){
+
+		double[] genotypeLargestIndidivual = new double[DIMENSIONS]; 
+		double sumGenotype = 0;
+		double largestSumGenotype = -50;
+		for (int i = 0; i < popSize; i++) {
+
+			Individual currIndividual = getIndividualAtIndex(i);
+			double[] genotypeCurrIndividual = currIndividual.getGenotype();
+
+			for(double g:genotypeCurrIndividual){
+				sumGenotype += g;
+			}
+
+			if (sumGenotype > largestSumGenotype) {
+				largestSumGenotype = sumGenotype;
+				genotypeLargestIndidivual = genotypeCurrIndividual;
+			}
+		}
+		
+		return genotypeLargestIndidivual;
 	}
 }

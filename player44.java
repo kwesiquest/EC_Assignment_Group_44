@@ -15,10 +15,17 @@ public class player44 implements ContestSubmission
 	Random rnd_;
 	ContestEvaluation evaluation_;
 	private int evaluations_limit_; //10.000
+	SelectionMethods select;
+	CrossOver crossOver;
+	Mutation mutation;
 
 	public player44()
 	{
 		rnd_ = new Random();
+		select = new SelectionMethods();
+		crossOver = new CrossOver();
+		mutation = new Mutation();
+		
 	}
 
 	public static void main(String[] args) {
@@ -56,73 +63,6 @@ public class player44 implements ContestSubmission
 		}
 	}
 
-	public double bentCigarFunction(double phenotype[], int dimensions){
-		double result = 0;
-
-		//This for loop calculates what is inside the summation sign
-		for(int i = 1; i < dimensions ; i++) {
-			result += Math.pow(phenotype[i],2);
-		}
-		//10^6 * result of summation sum
-		result *= Math.pow(10, 6);
-
-		//+ left side of function (x1^2)
-		result +=  Math.pow(phenotype[0],2);
-
-		return result;
-	}
-
-
-
-	public List<Individual> onePointCrossOver(Individual[] parents){
-		//parents[0].length already provides dimensions
-		int dimensions = parents[0].getDimensionsCount(); //is 10
-
-		//Draw a random integer which will signify AFTER which dimension we will be cutting
-		//So if random integer = 2, you cut between 2 and 3.
-		//This means the random integer can take values between 0 to 8, as a 9 will cut behind the 9 which is null
-		int cutBehindThisDimension = rnd_.nextInt(dimensions - 1);
-
-		//Lets create the childrens genotype
-		double genotype[][] = new double[2][dimensions];
-
-		//Child 0 gets the first cutBehindThisDimensions number of dimensions from parent 0
-		//While child 1 gets the first cutBehindThisDimensions number of dimensions from parent 1
-		for (int i = 0; i < cutBehindThisDimension; i++) {
-			genotype[0][i] = parents[0].getAlleleAtDim(i);
-			genotype[1][i] = parents[1].getAlleleAtDim(i);
-		}
-
-		//Child 0 gets the rest of his dimensions from parent 1
-		//Child 1 gets the rest of his dimensions from parent 0
-		for (int i = cutBehindThisDimension; i < dimensions; i++) {
-			genotype[1][i] = parents[1].getAlleleAtDim(i); //Note the parents are switched
-			genotype[1][i] = parents[0].getAlleleAtDim(i); //Note the parents are switched
-		}
-
-		//Instantiate child
-		List <Individual> children = new ArrayList<Individual>();
-		for (int i = 0; i < genotype.length; i++) {
-			children.add(new Individual(genotype[i]));
-		}
-		return children;
-	}
-
-	public void uniformMutation(Individual child){
-		double[] genotype = child.getGenotype();
-		int dimensions = genotype.length; //is 10
-		float chance = 1.0f / dimensions; //is 0.1
-
-		//	All dimensions/alleles have an equal chance (10%) to mutate
-		int mutationsReceived = 0;
-		for (int i = 0; i < dimensions; i++) {
-			if (rnd_.nextFloat() < chance) {
-				genotype[i] = -5 + rnd_.nextDouble() * 10;
-				mutationsReceived++;
-			}
-		}
-	}
-
 	private Population setup(int popSize, int dimensions, boolean eclipsetest) {
 		Population population = new Population(popSize = 100);
 		population.initialiseNewRandomPopulation(rnd_);
@@ -151,65 +91,95 @@ public class player44 implements ContestSubmission
 		//System.out.println("Fitness At Evals:");
 
 		if(evaluation_==null) {
-			//testecllipse=true
-		}
-		else {
+			//testeclipse = true
+		} else {
 			Population population = setup(popSize, dimensions, false);
-			while(evals<evaluations_limit_){
+			
+			while(evals < evaluations_limit_){
+			
 
 				//	Parent selection
-				//	First we see who are the fittest individuals
-				//List<Individual> fittestIndividuals = population.UniformParentSelection(numberOfParentsToSelect, rnd_);
-				List<Individual> fittestIndividuals = population.GetFittestIndividuals(numberOfParentsToSelect);
-				//	Ok, so who will breed with who
+				List<Individual> selectedParents = select.GetFittestIndividuals(numberOfParentsToSelect, population);
+								
+				// Reproduction
 				int numberOfParentsPerOffspring = 2;
 				Individual parents[] = new Individual[numberOfParentsPerOffspring];
-				List<Individual> children = new ArrayList<Individual>();
+				
+				List<Individual> childrenOffspring = new ArrayList<Individual>();
 				////While valid group of parents can be found
-				while (fittestIndividuals.size() >= numberOfParentsPerOffspring) {
-
+				while (selectedParents.size() >= numberOfParentsPerOffspring) {
 					//Get which individuals will bare this loop's child
 					for (int i = 0; i < numberOfParentsPerOffspring; i++) {
-						int popthis = rnd_.nextInt(fittestIndividuals.size());
-						parents[i] = fittestIndividuals.remove(popthis);
+						int popthis = rnd_.nextInt(selectedParents.size());
+						parents[i] = selectedParents.remove(popthis);
 					}
-
-					//	Make two children from the two parents
-					List<Individual> newChildren = onePointCrossOver(parents); 
-
-					//	Add the children found in this iteration to the collection of children
-					children.addAll(newChildren);	
+					
+					//	Crossover
+					List<Individual> newChildren = crossOver.onePointCrossOver(parents, rnd_); 
+					childrenOffspring.addAll(newChildren);	
 				}
 
 
-
-				double maxFitness = 0.;
-				
 				//	Apply (potential) mutation to the children, one child at a time
-				for (int i = 0; i < children.size(); i++) {
-					uniformMutation(children.get(i));
-					children.get(i).setFitness((double) evaluation_.evaluate(children.get(i).getGenotype()));
-					if(children.get(i).getFitness() >= maxFitness) {
-						maxFitness = children.get(i).getFitness();
-					}
-					evals++;
-					System.out.print(evals);
-					System.out.print(", ");
-					System.out.println(maxFitness);
-					//if(children.get(i).getFitness() > 9.0) {
-					//System.out.print(evals);
-					//System.out.print(", ");
-					//System.out.println(children.get(i).getFitness());
-					//}
+				List<Individual> childrenMutated = new ArrayList<Individual>();
+				for (int i = 0; i < childrenOffspring.size(); i++) {
+					Individual mutatedChild = childrenOffspring.get(i);
+					mutation.uniformMutation(mutatedChild);
+					childrenMutated.add(mutatedChild);
+				}
+
+				// Evaluate children
+				List<Individual> children = new ArrayList<Individual>();
+				for (int i = 0; i < childrenMutated.size(); i++) {
+					Individual evaluatedChild = childrenMutated.get(i);
+					double[] genotypeEvaluatedChild = evaluatedChild.getGenotype();
+					double fitnessEvaluatedChild = (double) evaluation_.evaluate(genotypeEvaluatedChild);
+					evaluatedChild.setFitness(fitnessEvaluatedChild);
+					children.add(evaluatedChild);
+					evals++;				
 					if (evals == evaluations_limit_){
 						return;
 					}
 				}
 
 				//always even
-				List<Individual> ok = population.GetWorstIndividuals(children.size());
+				List<Individual> ok = select.GetWorstIndividuals(children.size(), population);
 				population.removeIndividuals(ok);
 				population.addIndividuals(children);
+
+				double cosineDistanceMax = population.getMaxDistance("cosine");
+				System.out.print("cosineDistanceMax: ");
+				System.out.println(cosineDistanceMax);
+				
+				double euclidieanDistanceMax = population.getMaxDistance("euclidean");
+				System.out.print("euclidieanDistanceMax: ");
+				System.out.println(euclidieanDistanceMax);
+
+				double averageEuclDistance = population.averageEuclideanDistance();
+				System.out.print("average Euclidean Distance: ");
+				System.out.println(averageEuclDistance);
+
+				double averageFitness = population.getAverageFitness();
+				System.out.print("averageFitness: ");
+				System.out.println(averageFitness);
+
+				double stdFitness = population.getStdFitness();
+				System.out.print("stdFitness: ");
+				System.out.println(stdFitness);
+
+				double maxFitness = population.getMaxFitness();
+				System.out.print("maxFitness: ");
+				System.out.println(maxFitness);
+
+				double cosineSimMin = population.cosineSimilarityMin();
+				System.out.print("cosineSimMin: ");
+				System.out.println(cosineSimMin);
+
+
+	
+
+				//
+
 
 
 				//double child[] = genes;
