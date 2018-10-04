@@ -2,6 +2,7 @@
 javabbob/
 tmp/
 .metadata/
+.idea/
 
 # file types
 *.class
