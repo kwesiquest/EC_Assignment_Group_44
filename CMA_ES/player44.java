@@ -554,9 +554,9 @@ public class player44 implements ContestSubmission
 					max = D[i][i];
 				}
 			}
-			//if (arfitness[0] <= 0.000005 || max > 1*Math.exp(7)*min ) {
-			//	break;
-			//}
+			if (arfitness[0] <= 0.01 || max > 1*Math.exp(7)*min ) {
+				break;
+			}
 		}
 	}
 }
