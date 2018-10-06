@@ -18,6 +18,7 @@ public class player44 implements ContestSubmission
 	SelectionMethods select;
 	CrossOver crossOver;
 	Mutation mutation;
+	Island island;
 
 	public player44()
 	{
@@ -25,7 +26,6 @@ public class player44 implements ContestSubmission
 		select = new SelectionMethods();
 		crossOver = new CrossOver();
 		mutation = new Mutation();
-		
 	}
 
 	public static void main(String[] args) {
@@ -63,18 +63,9 @@ public class player44 implements ContestSubmission
 		}
 	}
 
-	private Population setup(int popSize, int dimensions, boolean eclipsetest) {
-		Population population = new Population(popSize = 100);
+	private Population setup(int popSize) {
+		Population population = new Population(popSize);
 		population.initialiseNewRandomPopulation(rnd_);
-
-		if(eclipsetest==false) {
-			for (int i = 0; i < population.getPopSize(); i++) {
-				Individual individual = population.getIndividualAtIndex(i); 
-				double genotype[] = individual.getGenotype();
-				//individual.setFitness((double) evaluation_.evaluate(genotype));  
-				individual.setFitness((double) evaluation_.evaluate(individual.getGenotype()));
-			}
-		}
 		return population;
 	}
 
@@ -84,20 +75,34 @@ public class player44 implements ContestSubmission
 	{
 		int popSize = 100;
 		int dimensions = 10; //	All functions take 10 input variables, so 10 dimensions
+		int generation = 0;
+		boolean multiplePopulations = true;
 
 		int evals = popSize; // As every new individual of the newly formed population had to be evaluated
 		int numberOfParentsToSelect = 12;
 
 		//System.out.println("Fitness At Evals:");
 
-		if(evaluation_==null) {
-			//testeclipse = true
-		} else {
-			Population population = setup(popSize, dimensions, false);
-			
-			while(evals < evaluations_limit_){
-			
+		int migrationRate = 10;
+		int migrationSize = 5;
 
+		Population population1 = setup(popSize);
+		Island island = new Island(migrationRate, migrationSize);
+		island.addPopulation(population1);
+
+		if (multiplePopulations){
+			Population population2 = setup(popSize);
+			island.addPopulation(population2);
+		}
+
+
+		while(evals < evaluations_limit_){
+			
+			island.generations ++;
+
+			for (Population population:island.populations){
+
+				
 				//	Parent selection
 				List<Individual> selectedParents = select.GetFittestIndividuals(numberOfParentsToSelect, population);
 								
@@ -142,7 +147,11 @@ public class player44 implements ContestSubmission
 					}
 				}
 
-				//always even
+				// Check for migration
+				if (multiplePopulations){
+					island.migrate();
+				}
+
 				List<Individual> ok = select.GetWorstIndividuals(children.size(), population);
 				population.removeIndividuals(ok);
 				population.addIndividuals(children);
@@ -175,23 +184,9 @@ public class player44 implements ContestSubmission
 				System.out.print("cosineSimMin: ");
 				System.out.println(cosineSimMin);
 
-
-	
-
-				//
-
-
-
-				//double child[] = genes;
-				//double child[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
-
-				// Check fitness of unknown fuction
-				//Double fitness = (double) evaluation_.evaluate(child);
-				//evals++;
-				// Select survivors
 			}
-
 		}
 
 	}
+
 }
