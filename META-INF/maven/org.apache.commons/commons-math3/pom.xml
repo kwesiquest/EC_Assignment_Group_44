@@ -1,0 +1,510 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.apache.commons</groupId>
+	<artifactId>commons-math3</artifactId>
+	<version>3.6.1</version>
+	<packaging>jar</packaging>
+	<name>Apache Commons Math</name>
+	<inceptionYear>2003</inceptionYear>
+	<description>The Apache Commons Math project is a library of lightweight, self-contained mathematics and statistics components addressing the most common practical problems not immediately available in the Java programming language or commons-lang.</description>
+	<url>http://commons.apache.org/proper/commons-math/</url>
+	<issueManagement>
+		<system>jira</system>
+		<url>http://issues.apache.org/jira/browse/MATH</url>
+	</issueManagement>
+	<scm>
+		<connection>scm:git:http://git-wip-us.apache.org/repos/asf/commons-math.git</connection>
+		<developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/commons-math.git</developerConnection>
+		<url>https://git-wip-us.apache.org/repos/asf?p=commons-math.git</url>
+	</scm>
+	<distributionManagement>
+		<site>
+			<id>apache.website</id>
+			<name>Apache Commons Site</name>
+			<url>scm:svn:https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-math/</url>
+		</site>
+	</distributionManagement>
+	<developers>
+		<developer>
+			<name>Mikkel Meyer Andersen</name>
+			<id>mikl</id>
+			<email>mikl at apache dot org</email>
+		</developer>
+		<developer>
+			<name>Bill Barker</name>
+			<id>billbarker</id>
+			<email>billbarker at apache dot org</email>
+		</developer>
+		<developer>
+			<name>Sébastien Brisard</name>
+			<id>celestin</id>
+			<email>celestin at apache dot org</email>
+		</developer>
+		<developer>
+			<name>Albert Davidson Chou</name>
+			<id>achou</id>
+			<email>achou at apache dot org</email>
+		</developer>
+		<developer>
+			<name>Mark Diggory</name>
+			<id>mdiggory</id>
+			<email>mdiggory at apache dot org</email>
+		</developer>
+		<developer>
+			<name>Robert Burrell Donkin</name>
+			<id>rdonkin</id>
+			<email>rdonkin at apache dot org</email>
+		</developer>
+		<developer>
+			<name>Otmar Ertl</name>
+			<id>oertl</id>
+			<email>oertl at apache dot org</email>
+		</developer>
+		<developer>
+			<name>Luc Maisonobe</name>
+			<id>luc</id>
+			<email>luc at apache dot org</email>
+		</developer>
+		<developer>
+			<name>Tim O'Brien</name>
+			<id>tobrien</id>
+			<email>tobrien at apache dot org</email>
+		</developer>
+		<developer>
+			<name>J. Pietschmann</name>
+			<id>pietsch</id>
+			<email>j3322ptm at yahoo dot de</email>
+		</developer>
+		<developer>
+			<name>Dimitri Pourbaix</name>
+			<id>dimpbx</id>
+			<email>dimpbx at apache dot org</email>
+		</developer>
+		<developer>
+			<name>Gilles Sadowski</name>
+			<id>erans</id>
+			<email>erans at apache dot org</email>
+		</developer>
+		<developer>
+			<name>Greg Sterijevski</name>
+			<id>gregs</id>
+			<email>gregs at apache dot org</email>
+		</developer>
+		<developer>
+			<name>Brent Worden</name>
+			<id>brentworden</id>
+			<email>brentworden at apache dot org</email>
+		</developer>
+		<developer>
+			<name>Thomas Neidhart</name>
+			<id>tn</id>
+			<email>tn at apache dot org</email>
+		</developer>
+		<developer>
+			<name>Evan Ward</name>
+			<id>evanward</id>
+			<email>evanward at apache dot org</email>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Eldar Agalarov</name>
+		</contributor>
+		<contributor>
+			<name>Tim Allison</name>
+		</contributor>
+		<contributor>
+			<name>C. Scott Ananian</name>
+		</contributor>
+		<contributor>
+			<name>Mark Anderson</name>
+		</contributor>
+		<contributor>
+			<name>Peter Andrews</name>
+		</contributor>
+		<contributor>
+			<name>Rémi Arntzen</name>
+		</contributor>
+		<contributor>
+			<name>Matt Adereth</name>
+		</contributor>
+		<contributor>
+			<name>Jared Becksfort</name>
+		</contributor>
+		<contributor>
+			<name>Michael Bjorkegren</name>
+		</contributor>
+		<contributor>
+			<name>Brian Bloniarz</name>
+		</contributor>
+		<contributor>
+			<name>John Bollinger</name>
+		</contributor>
+		<contributor>
+			<name>Cyril Briquet</name>
+		</contributor>
+		<contributor>
+			<name>Dave Brosius</name>
+		</contributor>
+		<contributor>
+			<name>Dan Checkoway</name>
+		</contributor>
+		<contributor>
+			<name>Anders Conbere</name>
+		</contributor>
+		<contributor>
+			<name>Charles Cooper</name>
+		</contributor>
+		<contributor>
+			<name>Paul Cowan</name>
+		</contributor>
+		<contributor>
+			<name>Benjamin Croizet</name>
+		</contributor>
+		<contributor>
+			<name>Larry Diamond</name>
+		</contributor>
+		<contributor>
+			<name>Aleksei Dievskii</name>
+		</contributor>
+		<contributor>
+			<name>Rodrigo di Lorenzo Lopes</name>
+		</contributor>
+		<contributor>
+			<name>Hasan Diwan</name>
+		</contributor>
+		<contributor>
+			<name>Ted Dunning</name>
+		</contributor>
+		<contributor>
+			<name>Ole Ersoy</name>
+		</contributor>
+		<contributor>
+			<name>Ajo Fod</name>
+		</contributor>
+		<contributor>
+			<name>John Gant</name>
+		</contributor>
+		<contributor>
+			<name>Ken Geis</name>
+		</contributor>
+		<contributor>
+			<name>Hank Grabowski</name>
+		</contributor>
+		<contributor>
+			<name>Bernhard Grünewaldt</name>
+		</contributor>
+		<contributor>
+			<name>Elliotte Rusty Harold</name>
+		</contributor>
+		<contributor>
+			<name>Dennis Hendriks</name>
+		</contributor>
+		<contributor>
+			<name>Reid Hochstedler</name>
+		</contributor>
+		<contributor>
+			<name>Matthias Hummel</name>
+		</contributor>
+		<contributor>
+			<name>Curtis Jensen</name>
+		</contributor>
+		<contributor>
+			<name>Bruce A Johnson</name>
+		</contributor>
+		<contributor>
+			<name>Ismael Juma</name>
+		</contributor>
+		<contributor>
+			<name>Eugene Kirpichov</name>
+		</contributor>
+		<contributor>
+			<name>Oleksandr Kornieiev</name>
+		</contributor>
+		<contributor>
+			<name>Piotr Kochanski</name>
+		</contributor>
+		<contributor>
+			<name>Sergei Lebedev</name>
+		</contributor>
+		<contributor>
+			<name>Bob MacCallum</name>
+		</contributor>
+		<contributor>
+			<name>Jake Mannix</name>
+		</contributor>
+		<contributor>
+			<name>Benjamin McCann</name>
+		</contributor>
+		<contributor>
+			<name>Patrick Meyer</name>
+		</contributor>
+		<contributor>
+			<name>J. Lewis Muir</name>
+		</contributor>
+		<contributor>
+			<name>Venkatesha Murthy</name>
+		</contributor>
+		<contributor>
+			<name>Christopher Nix</name>
+		</contributor>
+		<contributor>
+			<name>Fredrik Norin</name>
+		</contributor>
+		<contributor>
+			<name>Sean Owen</name>
+		</contributor>
+		<contributor>
+			<name>Sujit Pal</name>
+		</contributor>
+		<contributor>
+			<name>Todd C. Parnell</name>
+		</contributor>
+		<contributor>
+			<name>Andreas Rieger</name>
+		</contributor>
+		<contributor>
+			<name>Sébastien Riou</name>
+		</contributor>
+		<contributor>
+			<name>Bill Rossi</name>
+		</contributor>
+		<contributor>
+			<name>Matthew Rowles</name>
+		</contributor>
+		<contributor>
+			<name>Pavel Ryzhov</name>
+		</contributor>
+		<contributor>
+			<name>Joni Salonen</name>
+		</contributor>
+		<contributor>
+			<name>Michael Saunders</name>
+		</contributor>
+		<contributor>
+			<name>Thorsten Schaefer</name>
+		</contributor>
+		<contributor>
+			<name>Christopher Schuck</name>
+		</contributor>
+		<contributor>
+			<name>Christian Semrau</name>
+		</contributor>
+		<contributor>
+			<name>David Stefka</name>
+		</contributor>
+		<contributor>
+			<name>Mauro Talevi</name>
+		</contributor>
+		<contributor>
+			<name>Radoslav Tsvetkov</name>
+		</contributor>
+		<contributor>
+			<name>Kim van der Linde</name>
+		</contributor>
+		<contributor>
+			<name>Alexey Volkov</name>
+		</contributor>
+		<contributor>
+			<name>Andrew Waterman</name>
+		</contributor>
+		<contributor>
+			<name>Jörg Weimar</name>
+		</contributor>
+		<contributor>
+			<name>Christian Winter</name>
+		</contributor>
+		<contributor>
+			<name>Piotr Wydrych</name>
+		</contributor>
+		<contributor>
+			<name>Xiaogang Zhang</name>
+		</contributor>
+		<contributor>
+			<name>Chris Popp</name>
+		</contributor>
+	</contributors>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.x</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<properties>
+		<!-- Do not change: "math" is the name of the component even if the
+         name of the base package evolves with major release numbers
+         (see "commons.osgi.symbolicName", below). -->
+		<commons.componentid>math</commons.componentid>
+		<!-- This value must reflect the current name of the base package. -->
+		<commons.osgi.symbolicName>org.apache.commons.math3</commons.osgi.symbolicName>
+		<!-- do not use snapshot suffix here -->
+		<commons.release.version>3.6.1</commons.release.version>
+		<commons.release.desc>(requires Java 1.5+)</commons.release.desc>
+		<commons.rc.version>RC1</commons.rc.version>
+		<commons.binary.suffix>-bin</commons.binary.suffix>
+		<commons.release.2.version>2.2</commons.release.2.version>
+		<!-- override parent name, because 2.2 uses different artifactId -->
+		<commons.release.2.name>commons-math-${commons.release.2.version}</commons.release.2.name>
+		<commons.release.2.desc>(requires Java 1.5+)</commons.release.2.desc>
+		<commons.release.2.binary.suffix>
+		</commons.release.2.binary.suffix>
+		<commons.jira.id>MATH</commons.jira.id>
+		<commons.jira.pid>12310485</commons.jira.pid>
+		<commons.encoding>UTF-8</commons.encoding>
+		<maven.compiler.source>1.5</maven.compiler.source>
+		<maven.compiler.target>1.5</maven.compiler.target>
+		<math.pmd.version>3.5</math.pmd.version>
+		<math.findbugs.version>3.0.2</math.findbugs.version>
+		<math.checkstyle.version>2.17</math.checkstyle.version>
+		<math.clirr.version>2.6.1</math.clirr.version>
+		<!-- Temporary fix to support Java 8 -->
+		<commons.jacoco.version>0.7.5.201505241946</commons.jacoco.version>
+		<commons.jacoco.classRatio>0.96</commons.jacoco.classRatio>
+		<commons.jacoco.instructionRatio>0.8</commons.jacoco.instructionRatio>
+		<commons.jacoco.methodRatio>0.8</commons.jacoco.methodRatio>
+		<commons.jacoco.branchRatio>0.8</commons.jacoco.branchRatio>
+		<commons.jacoco.complexityRatio>0.8</commons.jacoco.complexityRatio>
+		<commons.jacoco.lineRatio>0.85</commons.jacoco.lineRatio>
+		<commons.jacoco.haltOnFailure>false</commons.jacoco.haltOnFailure>
+		<commons.site.path>math</commons.site.path>
+		<commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-math</commons.scmPubUrl>
+		<commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
+		<!-- Temporary fix to replace svn-based build number with git-based build number -->
+		<buildnumber.skip>true</buildnumber.skip>
+		<math.jgit.buildnumber.version>1.2.10</math.jgit.buildnumber.version>
+		<implementation.build>${git.revision}; ${maven.build.timestamp}</implementation.build>
+		
+			<debian.hasPackageVersion/>
+		
+			<debian.originalVersion>3.6.1</debian.originalVersion>
+		
+			<debian.package>libcommons-math3-java</debian.package>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>**/*Test.java</include>
+						<include>**/*TestBinary.java</include>
+						<include>**/*TestPermutations.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/*AbstractTest.java</exclude>
+					</excludes>
+				</configuration>
+			<version>2.17</version>
+			</plugin>
+			<!--  Attaches the commons-math3 tools JAR to the Maven lifecycle
+            to ensure they will be signed and deployed as normal -->
+			<!--  MathJax -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<additionalparam>-header'&lt;script type="text/javascript" src="file:///usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"&gt;&lt;/script&gt;'</additionalparam>
+					<additionalparam>--allow-script-in-comments</additionalparam>
+				</configuration>
+			<version>2.10.4</version>
+			</plugin>
+		</plugins>
+	</build>
+	<reporting>
+		<plugins>
+			<!--  MathJax -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<additionalparam>-header'&lt;script type="text/javascript" src="file:///usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"&gt;&lt;/script&gt;'</additionalparam>
+				</configuration>
+			<version>2.10.4</version>
+			</plugin>
+		</plugins>
+	</reporting>
+	<profiles>
+		<profile>
+			<id>jgit-buildnumber</id>
+			<activation>
+				<file>
+					<exists>.git</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>setup-checkout</id>
+			<activation>
+				<file>
+					<missing>site-content</missing>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+				</plugins>
+			</build>
+		</profile>
+		<!-- Ekstazi (www.ekstazi.org) profile to optimize regression testing -->
+		<profile>
+			<id>ekstazi</id>
+			<activation>
+				<property>
+					<name>ekstazi</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.ekstazi</groupId>
+						<artifactId>ekstazi-maven-plugin</artifactId>
+						<version>4.4.0</version>
+						<configuration>
+							<forcefailing>true</forcefailing>
+						</configuration>
+						<executions>
+							<execution>
+								<id>ekstazi</id>
+								<goals>
+									<goal>select</goal>
+									<goal>restore</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<excludesFile>${java.io.tmpdir}/${user.name}EkstaziExcludes</excludesFile>
+						</configuration>
+					<version>2.17</version>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
