@@ -290,6 +290,9 @@ public class player44 implements ContestSubmission
 					
 				}
 				counteval = counteval + 1;
+				if (counteval == evaluations_limit_ - 1){
+					return;
+				}
 			}
 			
 			int[] arindex = GetWorstIndexes(arfitness, mu);
