@@ -14,7 +14,7 @@ public class player44 implements ContestSubmission
 	Random rnd_;
 	NormalDistribution randn;
 	ContestEvaluation evaluation_;
-    private int evaluations_limit_;
+    	private int evaluations_limit_;
 	
 	public player44()
 	{
