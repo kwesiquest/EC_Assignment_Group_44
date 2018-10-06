@@ -1,6 +1,0 @@
-emsala@emsala-HP-Pavilion-Laptop-14-bf0xx:~/eclipse-workspace/EC_Assignment_Group_44$ javac -cp contest.jar:commons-math3-3.6.1.jar:. player44.java CrossOver.java Individual.java Mutation.java Population.java SelectionMethods.java;jar cmf MainClass.txt submission.jar player44.class CrossOver.class Individual.class Mutation.class Population.class SelectionMethods.class ./org/;java -jar testrun.jar -submission=player44 -evaluation=SphereEvaluation -seed=1 > analyze_results/storeresults_testjar.txt
-org.apache.commons.math3.exception.MaxCountExceededException: illegal state: convergence failed
-	at org.apache.commons.math3.linear.EigenDecomposition.findEigenVectors(EigenDecomposition.java:641)
-	at org.apache.commons.math3.linear.EigenDecomposition.<init>(EigenDecomposition.java:122)
-	at player44.run(player44.java:475)
-	at ConsertTestBox.main(ConsertTestBox.java:97)
