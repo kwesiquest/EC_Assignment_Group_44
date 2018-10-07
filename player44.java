@@ -218,8 +218,6 @@ public class player44 implements ContestSubmission
 	public void run(){
 		//inputs
 		
-		System.out.println("runt hij uberhaupt?");
-		
 		int N = 10; //Number of objective variables/problem dimensions
 		double[] xmean = new double[N];//{-2.5,-2.0,-1.5,-1.0,-0.5,0.0,0.5,1.0,1.5,2.0}; //objective variables initial point
 		for (int i = 0; i < xmean.length; i++) {
@@ -298,8 +296,6 @@ public class player44 implements ContestSubmission
 		double best = 349439349439349.;
 		double bestgenotype[] = new double[N];
 		
-		System.out.println("voor de while");
-		
 		int counteval = 0;
 		while (counteval < evaluations_limit_) {
 			double arx[][] = new double[N][lambda];
@@ -334,13 +330,9 @@ public class player44 implements ContestSubmission
 				counteval = counteval + 1;
 				if (counteval == evaluations_limit_ - lambda) {
 					System.out.println(counteval);
-					//print(best);
-					//printvector(bestgenotype);
 					return;
 				}
 			}
-			
-			System.out.println("na maken van genotypes");
 			
 			int[] arindex = GetBestIndexes(arfitness, mu);
 			for (int i = 0; i < arindex.length; i++) {
@@ -526,13 +518,17 @@ public class player44 implements ContestSubmission
 					
 				}
 				
-				System.out.println("voordat eigenvalues berekent worden");
+				System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+				for (int i = 0; i < arindex.length; i++){
+					System.out.println(arindex[i]);
+				}
+				System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+				System.out.println(best);
 
 				//Eigenvalues
 				RealMatrix test = MatrixUtils.createRealMatrix(C);
 				EigenDecomposition ok = new EigenDecomposition(test);
 				
-				System.out.println("nadat eigenvalues berekent worden?");
 				
 				double hm[] = ok.getRealEigenvalues();
 				for (int i = 0; i < D.length; i++) {
