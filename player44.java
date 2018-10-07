@@ -298,6 +298,8 @@ public class player44 implements ContestSubmission
 		double best = 349439349439349.;
 		double bestgenotype[] = new double[N];
 		
+		System.out.println("voor de while");
+		
 		int counteval = 0;
 		while (counteval < evaluations_limit_) {
 			double arx[][] = new double[N][lambda];
@@ -337,6 +339,8 @@ public class player44 implements ContestSubmission
 					return;
 				}
 			}
+			
+			System.out.println("na maken van genotypes");
 			
 			int[] arindex = GetBestIndexes(arfitness, mu);
 			for (int i = 0; i < arindex.length; i++) {
@@ -522,12 +526,13 @@ public class player44 implements ContestSubmission
 					
 				}
 				
-				
+				System.out.println("voordat eigenvalues berekent worden");
 
 				//Eigenvalues
 				RealMatrix test = MatrixUtils.createRealMatrix(C);
 				EigenDecomposition ok = new EigenDecomposition(test);
 				
+				System.out.println("nadat eigenvalues berekent worden?");
 				
 				double hm[] = ok.getRealEigenvalues();
 				for (int i = 0; i < D.length; i++) {
