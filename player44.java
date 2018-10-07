@@ -218,6 +218,8 @@ public class player44 implements ContestSubmission
 	public void run(){
 		//inputs
 		
+		System.out.println("runt hij uberhaupt?");
+		
 		int N = 10; //Number of objective variables/problem dimensions
 		double[] xmean = new double[N];//{-2.5,-2.0,-1.5,-1.0,-0.5,0.0,0.5,1.0,1.5,2.0}; //objective variables initial point
 		for (int i = 0; i < xmean.length; i++) {
