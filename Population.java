@@ -9,12 +9,14 @@ public class Population{
 
 	//VARIABLES
 	public int popSize; 
+	public String popType;
 	private final int DIMENSIONS = 10;
 	private List<Individual> population;
 
 	//CONSTRUCTOR
-	public Population(int popSize) {
+	public Population(int popSize, String popType) {
 		this.popSize = popSize;	
+		this.popType = popType;
 	}
 
 	//METHODS
