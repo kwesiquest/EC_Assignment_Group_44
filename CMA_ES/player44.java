@@ -1,4 +1,3 @@
-
 import org.vu.contest.ContestSubmission;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.linear.EigenDecomposition;
@@ -14,7 +13,7 @@ public class player44 implements ContestSubmission
 	Random rnd_;
 	NormalDistribution randn;
 	ContestEvaluation evaluation_;
-    	private int evaluations_limit_;
+    private int evaluations_limit_;
 	
 	public player44()
 	{
@@ -26,6 +25,7 @@ public class player44 implements ContestSubmission
 	{
 		// Set seed of algortihms random process
 		rnd_.setSeed(seed);
+		randn.reseedRandomGenerator(seed);
 	}
 
 	public void setEvaluation(ContestEvaluation evaluation)
@@ -54,7 +54,6 @@ public class player44 implements ContestSubmission
 	public static void main(String[] args) {
 		player44 ok = new player44();
 		ok.run();
-
 	}
 	
 	public int[] GetWorstIndexes(double[] fitnessarray, int mu){
@@ -112,6 +111,64 @@ public class player44 implements ContestSubmission
 		return wag1;
 	}
 	
+	public int[] GetBestIndexes(double[] fitnessarray, int mu){
+		
+		//	Both topfitness arrays will sort by fittest at the end of the array
+		int[] topfitnessindividualsarray = new int[mu]; //Stores id's of fit individuals
+		double[] topfitnesvaluessarray = new double[mu]; //Stores fitness scores of fit individuals
+		for (int i = 0; i < mu; i++) {
+			topfitnesvaluessarray[i] = -1;
+		}
+		double lowestValue = topfitnesvaluessarray[0]; //As fitness is 0 to 10.
+		for (int i = 0; i < fitnessarray.length; i++) {
+
+			double currFitness = fitnessarray[i];
+			
+			if( currFitness >= lowestValue) {
+				//So we will be inserting this individual into top 10 cause its fitness is higher than one or more of the current top 10
+				for (int j = 0; j < topfitnesvaluessarray.length; j++) {
+					if (currFitness >= topfitnesvaluessarray[j]) { //fitness of to insert element is higher than current array element			
+						if (j == 0) { 
+							//This value falls of the left of the array
+							//No need to adjust it as the next cycle will replace this value anyway		
+						}
+						else if ( j == mu - 1) { //This new to insert value is the highest we have seen till now. So insert it at the end of array
+
+							topfitnesvaluessarray[j-1] = topfitnesvaluessarray[j];
+							topfitnesvaluessarray[j] = currFitness;
+
+							topfitnessindividualsarray[j-1] = topfitnessindividualsarray[j];
+							topfitnessindividualsarray[j] = i;
+						}
+						else { 
+
+							topfitnesvaluessarray[j-1] = topfitnesvaluessarray[j];
+							topfitnessindividualsarray[j-1] = topfitnessindividualsarray[j];
+						}
+					}
+					else { //fitness of to insert element is lower than current array element
+						topfitnesvaluessarray[j-1] = currFitness; //Settle in previous slot
+
+						topfitnessindividualsarray[j-1] = i;
+
+						j = mu; //End the for loop for this
+					}		
+					lowestValue = topfitnesvaluessarray[0];
+					//print(highestValue);
+				}
+			}
+		}
+		
+		//The lowest values are at the end, so turn the array around.
+		//This way the lowest value is at the start and increasing
+		int wag1[] = new int[mu];
+		for (int i = 0; i < mu; i++) {
+			wag1[i] = topfitnessindividualsarray[mu-1-i];
+		}
+		
+		return wag1;
+	}
+	
 	
 	public double norm(double[] vector) {
 		double sum = 0;
@@ -119,22 +176,6 @@ public class player44 implements ContestSubmission
 			sum = sum + Math.pow(vector[i], 2);
 		}
 		return Math.sqrt(sum);
-	}
-	
-	public double bentCigarFunction(double phenotype[], int dimensions){
-		double result = 0;
-
-		//This for loop calculates what is inside the summation sign
-		for(int i = 1; i < dimensions ; i++) {
-			result += Math.pow(phenotype[i],2);
-		}
-		//10^6 * result of summation sum
-		result *= Math.pow(10, 6);
-
-		//+ left side of function (x1^2)
-		result +=  Math.pow(phenotype[0],2);
-
-		return result;
 	}
 	
 	public double sumvector(double vector[]) {
@@ -174,17 +215,15 @@ public class player44 implements ContestSubmission
 		System.out.println(value);
 	}
     
-	public void run()
-	{
+	public void run(){
 		//inputs
+		
 		int N = 10; //Number of objective variables/problem dimensions
 		double[] xmean = new double[N];//{-2.5,-2.0,-1.5,-1.0,-0.5,0.0,0.5,1.0,1.5,2.0}; //objective variables initial point
 		for (int i = 0; i < xmean.length; i++) {
 			xmean[i] = -5 + rnd_.nextDouble() * 10;
 		}
 		double sigma = 0.3; //coordinate wise standard deviation (step size)
-		//double stopfitness = 0.00000000001; //stop if fitness < stopfitness (minimisation)
-		int stopeval = 10000; //stop after #evals
 		
 		int lambda = (int) (4 + Math.floor(3 * Math.log(N))); //=7, population size
 		double doublemu = lambda / 2.; //number of parents/points for recombination
@@ -259,7 +298,6 @@ public class player44 implements ContestSubmission
 		
 		int counteval = 0;
 		while (counteval < evaluations_limit_) {
-			
 			double arx[][] = new double[N][lambda];
 			double arfitness[] = new double[lambda];
 			for (int k = 0; k < lambda; k++) {
@@ -271,7 +309,7 @@ public class player44 implements ContestSubmission
 				for (int i = 0; i < N; i++) {
 					
 					for (int j = 0; j < N; j++) {
-						arx[i][k] = arx[i][k] + sigma * B[i][j] * draws[j]; ///<--- THIS WAS DRAWS[I];
+						arx[i][k] = arx[i][k] + sigma * B[i][j] * draws[j];
 					}
 					
 					arx[i][k] = arx[i][k] + xmean[i];
@@ -281,7 +319,7 @@ public class player44 implements ContestSubmission
 				for (int i = 0; i < genotype.length; i++) {
 					genotype[i] = arx[i][k];
 				}
-				arfitness[k] = (double) evaluation_.evaluate(genotype); //bentCigarFunction(genotype, N);
+				arfitness[k] = (double) evaluation_.evaluate(genotype);
 				if (arfitness[k] < best) {
 					best = arfitness[k];
 					for (int i = 0; i < N; i++) {
@@ -290,12 +328,23 @@ public class player44 implements ContestSubmission
 					
 				}
 				counteval = counteval + 1;
-				if (counteval == evaluations_limit_ - 1){
+				if (counteval == evaluations_limit_ - 1) {
+					//System.out.println("bestfitness:");
+					//print(best);
+					//printvector(bestgenotype);
 					return;
 				}
 			}
 			
-			int[] arindex = GetWorstIndexes(arfitness, mu);
+			int[] arindex = GetBestIndexes(arfitness, mu);
+			for (int i = 0; i < arindex.length; i++) {
+				//print(arindex[i]);
+				if (arfitness[i] == Double.POSITIVE_INFINITY) {
+					return; //if one of the values are infinite, sorting doenst work
+				}
+			}
+			//printvector(arfitness);
+			
 			double xold[] = xmean.clone();
 			
 			
@@ -491,9 +540,6 @@ public class player44 implements ContestSubmission
 					}
 				}
 				
-				
-				
-				
 				for (int i = 0; i < D.length; i++) {
 					D[i][i] = Math.sqrt(D[i][i]);
 				}
@@ -547,7 +593,7 @@ public class player44 implements ContestSubmission
 			}
 			
 			min = 3003030303989899898.;
-			max = -202039399898989.;
+			max = -9999999999999999999.;
 			
 			for (int i = 0; i < D.length; i++) {
 				if (D[i][i] < min) {
@@ -557,9 +603,12 @@ public class player44 implements ContestSubmission
 					max = D[i][i];
 				}
 			}
-			if (arfitness[0] <= 0.01 || max > 1*Math.exp(7)*min ) {
+			if (max > 1*Math.exp(7)*min ) {
 				break;
 			}
 		}
+		//System.out.println("bestfitness:");
+		//print(best);
+		//printvector(bestgenotype);
 	}
 }
