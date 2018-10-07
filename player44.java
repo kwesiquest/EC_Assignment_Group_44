@@ -340,6 +340,9 @@ public class player44 implements ContestSubmission
 				if (arfitness[i] == Double.POSITIVE_INFINITY) {
 					return; //if one of the values are infinite, sorting doenst work
 				}
+				if (arfitness[i] == Double.NEGATIVE_INFINITY) {
+					return; //if one of the values are infinite, sorting doenst work
+				}
 			}
 			//printvector(arfitness);
 			
