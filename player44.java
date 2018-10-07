@@ -334,7 +334,7 @@ public class player44 implements ContestSubmission
 				}
 			}
 			
-			int[] arindex = GetBestIndexes(arfitness, mu);
+			int[] arindex = GetWorstIndexes(arfitness, mu);
 			for (int i = 0; i < arindex.length; i++) {
 				//print(arindex[i]);
 				if (arfitness[i] == Double.POSITIVE_INFINITY) {
