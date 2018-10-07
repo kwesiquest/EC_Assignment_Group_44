@@ -11,15 +11,14 @@ public class Individual{
 	//VARIABLES
 	public double[] genotype;
 	private int dimensions;
-	private double fitnessVal;
+	public double fitnessVal;
 	private final double LOWERBOUND = -5;
 	private final double UPPERBOUND = 5;
 
 	//particle
 	public double[] velocity;
 	public double[] pBest;
-	public double fitnessIndBest;
-	public double fitnessInd;
+	public double fitnessValBest;
 	public Random rnd;
 
 
@@ -33,8 +32,8 @@ public class Individual{
 		rnd = new Random();
 		this.velocity = new double[10];	
 		this.pBest = new double[10]; //10?
-		fitnessIndBest = -1;
-		fitnessInd = -1;
+		fitnessValBest = -1;
+		fitnessVal = -1;
 		double rangeMin = -1;
 		double rangeMax = 1;
 
@@ -70,16 +69,23 @@ public class Individual{
 	}
 
 	//particle METHODS
-	public void evaluate(ContestEvaluation evaluation_) {
-		this.fitnessInd = (double) evaluation_.evaluate(this.genotype);
+	// public void evaluate(ContestEvaluation evaluation_) {
+	// 	this.fitnessVal = (double) evaluation_.evaluate(this.genotype);
 	
-		if(this.fitnessInd > this.fitnessIndBest || this.fitnessIndBest==-1) { // >>>>>>
+	// 	if(this.fitnessVal > this.fitnessValBest || this.fitnessValBest==-1) { // >>>>>>
+	// 		this.pBest = this.genotype;
+	// 		this.fitnessValBest = this.fitnessVal;
+	// 	}
+	// }
+
+	public void checkBestFitness() {
+		if(this.fitnessVal > this.fitnessValBest || this.fitnessValBest==-1) { // >>>>>>
 			this.pBest = this.genotype;
-			this.fitnessIndBest = this.fitnessInd;
+			this.fitnessValBest = this.fitnessVal;
 		}
 	}
 
-	public void update_velocity(double[] pos_best_g) {
+	public void updateVelocity(double[] pos_best_g) {
 		//W SHOULD BE BETWEEN 0.2 AND 0.9, ELSE BAD RESULTS
 		double w = 0.4; //Double.parseDouble(System.getProperty("var2"));       // constant inertia weight (how much to weigh the previous velocity)	(0.4 for random (fitness 4))
 		double c1= 1.5; //Double.parseDouble(System.getProperty("var3"));        // cognative constant <--mYB 1?		(1.5 for random (fitness 4))
@@ -97,7 +103,7 @@ public class Individual{
 	}
 
 
-	public void update_genotype() {
+	public void updateGenotype() {
 
 		for(int i =0; i < 10; i++) {
 			this.genotype[i] = this.genotype[i]+this.velocity[i];

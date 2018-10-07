@@ -19,6 +19,7 @@ public class player44 implements ContestSubmission
 	CrossOver crossOver;
 	Mutation mutation;
 	Island island;
+	int evals = 0;
 
 	public player44()
 	{
@@ -66,17 +67,22 @@ public class player44 implements ContestSubmission
 	private Population setup(int popSize, String popType) {
 		Population population = new Population(popSize, popType);
 		population.initialiseNewRandomPopulation(rnd_);
+		for (Individual newIndividual:population.population){
+			double fitnessNewIndividual = (double) evaluation_.evaluate(newIndividual.genotype);
+			newIndividual.setFitness(fitnessNewIndividual);
+		}
+		evals += popSize;
 		return population;
 	}
 
 
 	// Run your algorithm here
 	public void run(){
-		int popSize = 100;//Integer.parseInt(System.getProperty("var1"));
+		int popSize = 50;//Integer.parseInt(System.getProperty("var1"));
 		int dimensions = 10; //	All functions take 10 input variables, so 10 dimensions
 		int generation = 0;
 
-		int evals = popSize; // As every new individual of the newly formed population had to be evaluated
+		//standard algorithm parameters
 		int numberOfParentsToSelect = 12;
 
 		//particle swarm parameters
@@ -88,7 +94,9 @@ public class player44 implements ContestSubmission
 		int migrationRate = 10;
 		int migrationSize = 5;
 		Island island = new Island(migrationRate, migrationSize);
-		
+
+
+		//set up population(s)
 		Population population1 = setup(popSize, "swarm");
 		Population population2 = setup(popSize, "standard");
 		
@@ -99,6 +107,8 @@ public class player44 implements ContestSubmission
 		}
 
 		while(evals < evaluations_limit_){
+
+			System.out.print(evals);
 			
 			island.generations ++;
 			int whichPopulation = 0;
@@ -110,6 +120,8 @@ public class player44 implements ContestSubmission
 
 					//	Parent selection
 					List<Individual> selectedParents = select.GetFittestIndividuals(numberOfParentsToSelect, population);
+					System.out.print("selected: ");
+					System.out.print(selectedParents);
 									
 					// Reproduction
 					int numberOfParentsPerOffspring = 2;
@@ -191,18 +203,22 @@ public class player44 implements ContestSubmission
 
 					for(int i =0; i < popSize; i++) {
 						Individual currentIndividual = population.getIndividualAtIndex(i);
-						currentIndividual.evaluate(evaluation_);
-						if(currentIndividual.fitnessInd > err_best_g || err_best_g == -1) {	//if current fitness > best fitness group
+
+						currentIndividual.checkBestFitness();
+						if(currentIndividual.fitnessVal > err_best_g || err_best_g == -1) {	//if current fitness > best fitness group
 							pos_best_g = currentIndividual.genotype;
-							err_best_g = currentIndividual.fitnessInd;
+							err_best_g = currentIndividual.fitnessVal;
 						}
-						evals++;
 					}
 
 					for(int i =0; i<popSize; i++) {
 						Individual currentIndividual = population.getIndividualAtIndex(i) ;
-						currentIndividual.update_velocity(pos_best_g);
-						currentIndividual.update_genotype();
+						currentIndividual.updateVelocity(pos_best_g);
+						currentIndividual.updateGenotype();
+						double fitnessCurrentIndividual = (double) evaluation_.evaluate(currentIndividual.genotype);
+						currentIndividual.setFitness(fitnessCurrentIndividual);
+						evals++;
+
 					}
 
 

@@ -11,8 +11,8 @@ public class Population{
 	public int popSize; 
 	public String popType;
 	private final int DIMENSIONS = 10;
-	private List<Individual> population;
-
+	public List<Individual> population;
+	
 	//CONSTRUCTOR
 	public Population(int popSize, String popType) {
 		this.popSize = popSize;	
