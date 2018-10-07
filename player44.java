@@ -1,5 +1,3 @@
-
-
 import org.vu.contest.ContestSubmission;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.linear.EigenDecomposition;
@@ -223,7 +221,7 @@ public class player44 implements ContestSubmission
 		int N = 10; //Number of objective variables/problem dimensions
 		double[] xmean = new double[N];//{-2.5,-2.0,-1.5,-1.0,-0.5,0.0,0.5,1.0,1.5,2.0}; //objective variables initial point
 		for (int i = 0; i < xmean.length; i++) {
-			xmean[i] = -5 + rnd_.nextDouble() * 10;
+			xmean[i] = -2 + rnd_.nextDouble() * 4;
 		}
 		double sigma = 0.3; //coordinate wise standard deviation (step size)
 		
@@ -330,8 +328,8 @@ public class player44 implements ContestSubmission
 					
 				}
 				counteval = counteval + 1;
-				if (counteval == evaluations_limit_ - 1) {
-					//System.out.println("bestfitness:");
+				if (counteval == evaluations_limit_ - lambda) {
+					System.out.println(counteval);
 					//print(best);
 					//printvector(bestgenotype);
 					return;
