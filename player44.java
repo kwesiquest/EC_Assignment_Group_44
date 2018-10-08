@@ -53,6 +53,8 @@ public class player44 implements ContestSubmission
 	
 	public static void main(String[] args) {
 		player44 ok = new player44();
+		ok.rnd_.setSeed(1);
+		ok.randn.reseedRandomGenerator(1);
 		ok.run();
 	}
 	
@@ -154,7 +156,6 @@ public class player44 implements ContestSubmission
 						j = mu; //End the for loop for this
 					}		
 					lowestValue = topfitnesvaluessarray[0];
-					//print(highestValue);
 				}
 			}
 		}
@@ -165,10 +166,8 @@ public class player44 implements ContestSubmission
 		for (int i = 0; i < mu; i++) {
 			wag1[i] = topfitnessindividualsarray[mu-1-i];
 		}
-		
 		return wag1;
 	}
-	
 	
 	public double norm(double[] vector) {
 		double sum = 0;
@@ -214,14 +213,13 @@ public class player44 implements ContestSubmission
 	public void print(double value) {
 		System.out.println(value);
 	}
-    
+	
 	public void run(){
 		//inputs
-		
 		int N = 10; //Number of objective variables/problem dimensions
 		double[] xmean = new double[N];//{-2.5,-2.0,-1.5,-1.0,-0.5,0.0,0.5,1.0,1.5,2.0}; //objective variables initial point
 		for (int i = 0; i < xmean.length; i++) {
-			xmean[i] = -2 + rnd_.nextDouble() * 4;
+			xmean[i] = -4 + rnd_.nextDouble() * 8;
 		}
 		double sigma = 0.3; //coordinate wise standard deviation (step size)
 		
@@ -232,7 +230,6 @@ public class player44 implements ContestSubmission
 		for (int i = 0; i < (int)doublemu; i++) {
 			touse[i] = Math.log(i+1);
 		}
-		
 		
 		double[] weights = new double[(int) doublemu]; // array for weighted recombination
 		for (int i = 0; i < weights.length; i++) {
@@ -274,7 +271,6 @@ public class player44 implements ContestSubmission
 			}
 		}
 		
-		
 		double Dpow10[][] = new double[D.length][D.length];
 		for (int i = 0; i < D.length; i++) {
 			Dpow10[i][i] = Math.pow(D[i][i], -1);
@@ -290,12 +286,12 @@ public class player44 implements ContestSubmission
 		double eigeneval = 0;
 		double chiN = Math.pow(N, 0.5) * (1. - 1./(4*N)+1. / (21.*Math.pow(N, 2)));
 		
-		
 		double max = 0.;
 		double min = 2929293332.;
 		double best = 349439349439349.;
 		double bestgenotype[] = new double[N];
 		
+		int iteration = 0;
 		int counteval = 0;
 		while (counteval < evaluations_limit_) {
 			double arx[][] = new double[N][lambda];
@@ -307,84 +303,86 @@ public class player44 implements ContestSubmission
 					draws[i] = D[i][i] * randn.sample();
 				}
 				for (int i = 0; i < N; i++) {
-					
 					for (int j = 0; j < N; j++) {
 						arx[i][k] = arx[i][k] + sigma * B[i][j] * draws[j];
 					}
-					
 					arx[i][k] = arx[i][k] + xmean[i];
+					if (arx[i][k] >= 5) {
+						arx[i][k] = 5;
+					}
+					if (arx[i][k] <= -5) {
+						arx[i][k] = -5;
+					}
 				}
-				
 				double genotype[] = new double[N];
 				for (int i = 0; i < genotype.length; i++) {
 					genotype[i] = arx[i][k];
 				}
 				arfitness[k] = (double) evaluation_.evaluate(genotype);
-				if (arfitness[k] < best) {
+				if (arfitness[k] > best) {
 					best = arfitness[k];
 					for (int i = 0; i < N; i++) {
 						bestgenotype[i] = arx[i][k]; 
 					}
-					
 				}
 				counteval = counteval + 1;
-				if (counteval == evaluations_limit_ - lambda) {
-					System.out.println(counteval);
+				if (counteval == evaluations_limit_ - 1) {
+					System.out.println("bestfitness:");
+					print(best);
+					printvector(bestgenotype);
 					return;
 				}
 			}
 			
 			int[] arindex = GetWorstIndexes(arfitness, mu);
 			for (int i = 0; i < arindex.length; i++) {
-				//print(arindex[i]);
+				
 				if (arfitness[i] == Double.POSITIVE_INFINITY) {
-					return; //if one of the values are infinite, sorting doenst work
+					System.out.println("bestfitness:");
+					print(best);
+					printvector(bestgenotype);
+					return;
 				}
 				if (arfitness[i] == Double.NEGATIVE_INFINITY) {
-					return; //if one of the values are infinite, sorting doenst work
+					System.out.println("bestfitness:");
+					print(best);
+					printvector(bestgenotype);
+					return;
 				}
 			}
-			//printvector(arfitness);
+			
+			System.out.println(" ");
+			System.out.println(" ");
+			System.out.println("MATRICES FOR ITERATION: ");
+			print(iteration);
+			printmatrix(arx);
+			printvector(arfitness);
+			System.out.println("END FOR ITERATION: ");
+			System.out.println(" ");
+			System.out.println(" ");
 			
 			double xold[] = xmean.clone();
-			
-			
 			for (int i = 0; i < N; i++) {
-				
 				xmean[i] = 0;
 				for(int j = 0; j < mu; j++) {
-					
 					xmean[i] = xmean[i] + arx[i][arindex[j]] * weights[j];
-					
 				}
-				
-				
 			}
 			
 			double sum0x[] = new double[N];
 			for (int i = 0; i < N; i++) {
-				
 				sum0x[i] = 0;
-				for(int j = 0; j < N; j++) {
-					
+				for(int j = 0; j < N; j++) {	
 					sum0x[i] = sum0x[i] + invsqrtC[i][j] * (xmean[i]-xold[i]) / sigma;
-					
 				}
-				
-				
 				ps[i] = (1.-cs)*ps[i] + Math.sqrt(cs*(2.-cs)*mueff) * sum0x[i];
-				
 			}
 			
 			boolean hsig = norm(ps)/Math.sqrt(1.-Math.pow(1.-cs,2.*counteval/lambda)) /chiN < 1.4 + 2./(N+1.);
 			for(int i = 0; i < N; i++) {
-				
 				pc[i] = (1.-cc)*pc[i];
-				
 				if(hsig) { //if true, then we must do something, first iteration is false
-					
 					pc[i] = pc[i] + Math.sqrt(cc*(2.-cc)*mueff) * (xmean[i]-xold[i]) / sigma;
-					
 				}
 			}
 			
@@ -405,69 +403,43 @@ public class player44 implements ContestSubmission
 			
 			double first[][] = new double[C.length][C.length];
 			for (int i = 0; i < C.length; i++) {
-				
 				for (int j = 0; j < C.length; j++) {
-					
 					first[i][j] = (1.-cl-cmu) * C[i][j];
-					
 				}
-				
 			}
 			
 			double second[][] = new double[pc.length][pc.length];
 			for (int i = 0; i < pc.length; i++) {
-				
 				for (int j = 0; j < pc.length; j++) {
-					
 					second[i][j] =  pc[i] * pc[j] ; //cl applied later
-					
 				}
-				
 			}
-			//hsig is false first iteration, so its zero
 			
 			if (hsig == false) {
 				double third[][] = new double[C.length][C.length];
-				
 				for (int i = 0; i < C.length; i++) {
-					
 					for (int j = 0; j < C.length; j++) {
-						
 						third[i][j] = cc*(2.-cc) * C[i][j];
 						second[i][j] = second[i][j] + third[i][j];
-						
 					}
-					
 				}
-
 			}
-			
 			
 			double weightsdiagonal[][] = new double[weights.length][weights.length];
 			for (int i = 0; i < weights.length; i++) {
-				
 				weightsdiagonal[i][i] = weights[i];
-				
 			}
 			
-			
-			
 			double fourth1[][] = new double[artmp.length][artmp[0].length];
-			for (int i = 0; i < artmp.length; i++) {
-				
+			for (int i = 0; i < artmp.length; i++) {	
 				for (int j = 0; j < artmp[0].length; j++) {
-					
 					double sum9 = 0;
 					for (int k = 0; k < artmp[0].length; k++) { //what column of weights to multiply
-						
 						sum9 = sum9 + artmp[i][k] * weightsdiagonal[k][j];
-						
 					}
 					fourth1[i][j] = sum9;
 				}
-				
 			}
-			
 			
 			double artmptranspose[][] = transposeMatrix(artmp);
 			double fourth2[][] = new double[N][N];
@@ -481,19 +453,14 @@ public class player44 implements ContestSubmission
 				}	
 			}
 			
-			
-			
 			for (int i = 0; i < C.length; i++) {
 				for (int j = 0; j < C.length; j++) {	
 					C[i][j] = first[i][j] + cl * second[i][j] + fourth2[i][j];
 				}	
 			}
 			sigma = sigma * Math.exp((cs/damps)*(norm(ps)/chiN - 1));
-			
-			
-			
+
 			if (counteval - eigeneval > lambda / (cl + cmu )/N/10) {
-				
 				//Enforce symmetry
 				eigeneval = counteval;
 				double triuC[][] = new double[C.length][C.length];
@@ -501,7 +468,6 @@ public class player44 implements ContestSubmission
 					for (int j = 0 + i; j < C.length; j++) {
 						triuC[i][j] = C[i][j];
 					}
-					
 				}
 
 				double triuC1[][] = new double[C.length][C.length];
@@ -511,27 +477,16 @@ public class player44 implements ContestSubmission
 					}
 				}
 				
-				
 				double triuC1transpose[][] = transposeMatrix(triuC1);
-				
 				for (int i = 0; i < C.length; i++) {
 					for (int j = 0 + i + 1; j < C.length; j++) {
 						C[i][j] = triuC[i][j] + triuC1transpose[i][j];
 					}
-					
 				}
-				
-				System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-				for (int i = 0; i < arindex.length; i++){
-					System.out.println(arindex[i]);
-				}
-				System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-				System.out.println(best);
 
 				//Eigenvalues
 				RealMatrix test = MatrixUtils.createRealMatrix(C);
 				EigenDecomposition ok = new EigenDecomposition(test);
-				
 				
 				double hm[] = ok.getRealEigenvalues();
 				for (int i = 0; i < D.length; i++) {
@@ -612,9 +567,10 @@ public class player44 implements ContestSubmission
 			if (max > 1*Math.exp(7)*min ) {
 				break;
 			}
+			iteration = iteration + 1;
 		}
-		//System.out.println("bestfitness:");
-		//print(best);
-		//printvector(bestgenotype);
+		System.out.println("endingfitness:");
+		print(best);
+		printvector(bestgenotype);
 	}
 }
