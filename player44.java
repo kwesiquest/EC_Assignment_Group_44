@@ -210,6 +210,12 @@ public class player44 implements ContestSubmission
 		}
 	}
 	
+	public void printintvector(int vector[]) {
+		for (int i = 0; i < vector.length;i++) {
+			System.out.println(vector[i]);
+		}
+	}
+	
 	public void print(double value) {
 		System.out.println(value);
 	}
@@ -357,6 +363,7 @@ public class player44 implements ContestSubmission
 			print(iteration);
 			printmatrix(arx);
 			printvector(arfitness);
+			printintvector(arindex);
 			System.out.println("END FOR ITERATION: ");
 			System.out.println(" ");
 			System.out.println(" ");
