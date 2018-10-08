@@ -58,68 +58,13 @@ public class player44 implements ContestSubmission
 		ok.run();
 	}
 	
-	public int[] GetWorstIndexes(double[] fitnessarray, int mu){
-
-		//	Both topfitness arrays will sort by fittest at the end of the array
-		int[] topfitnessindividualsarray = new int[mu]; //Stores id's of fit individuals
-		double[] topfitnesvaluessarray = new double[mu]; //Stores fitness scores of fit individuals
-		for (int i = 0; i < mu; i++) {
-			topfitnesvaluessarray[i] = Double.POSITIVE_INFINITY;
-		}
-		double highestValue = Double.POSITIVE_INFINITY; //As fitness is 0 to 10.
-		for (int i = 0; i < fitnessarray.length; i++) {
-
-			double currFitness = fitnessarray[i];
-			
-			if( currFitness <= highestValue) {
-				//So we will be inserting this individual into top 10 cause its fitness is higher than one or more of the current top 10
-				for (int j = 0; j < topfitnesvaluessarray.length; j++) {
-					if (currFitness <= topfitnesvaluessarray[j]) { //fitness of to insert element is higher than current array element			
-						if (j == 0) { 
-							//This value falls of the left of the array
-							//No need to adjust it as the next cycle will replace this value anyway		
-						}
-						else if ( j == mu - 1) { //This new to insert value is the highest we have seen till now. So insert it at the end of array
-
-							topfitnesvaluessarray[j-1] = topfitnesvaluessarray[j];
-							topfitnesvaluessarray[j] = currFitness;
-
-							topfitnessindividualsarray[j-1] = topfitnessindividualsarray[j];
-							topfitnessindividualsarray[j] = i;
-						}
-						else { 
-
-							topfitnesvaluessarray[j-1] = topfitnesvaluessarray[j];
-							topfitnessindividualsarray[j-1] = topfitnessindividualsarray[j];
-						}
-					}
-					else { //fitness of to insert element is lower than current array element
-						topfitnesvaluessarray[j-1] = currFitness; //Settle in previous slot
-
-						topfitnessindividualsarray[j-1] = i;
-
-						j = mu; //End the for loop for this
-					}		
-					highestValue = topfitnesvaluessarray[0];
-					//print(highestValue);
-				}
-			}
-		}
-		
-		int wag1[] = new int[mu];
-		for (int i = 0; i < mu; i++) {
-			wag1[i] = topfitnessindividualsarray[mu-1-i];
-		}
-		return wag1;
-	}
-	
-	public int[] GetBestIndexes(double[] fitnessarray, int mu){
+	public int[] ForRealProgram(double[] fitnessarray, int mu){
 		
 		//	Both topfitness arrays will sort by fittest at the end of the array
 		int[] topfitnessindividualsarray = new int[mu]; //Stores id's of fit individuals
 		double[] topfitnesvaluessarray = new double[mu]; //Stores fitness scores of fit individuals
 		for (int i = 0; i < mu; i++) {
-			topfitnesvaluessarray[i] = -1;
+			topfitnesvaluessarray[i] = Double.NEGATIVE_INFINITY;
 		}
 		double lowestValue = topfitnesvaluessarray[0]; //As fitness is 0 to 10.
 		for (int i = 0; i < fitnessarray.length; i++) {
@@ -320,6 +265,7 @@ public class player44 implements ContestSubmission
 						arx[i][k] = -5;
 					}
 				}
+				
 				double genotype[] = new double[N];
 				for (int i = 0; i < genotype.length; i++) {
 					genotype[i] = arx[i][k];
@@ -330,6 +276,7 @@ public class player44 implements ContestSubmission
 					for (int i = 0; i < N; i++) {
 						bestgenotype[i] = arx[i][k]; 
 					}
+					
 				}
 				counteval = counteval + 1;
 				if (counteval == evaluations_limit_ - 1) {
@@ -340,7 +287,7 @@ public class player44 implements ContestSubmission
 				}
 			}
 			
-			int[] arindex = GetWorstIndexes(arfitness, mu);
+			int[] arindex = ForRealProgram(arfitness, mu);
 			for (int i = 0; i < arindex.length; i++) {
 				
 				if (arfitness[i] == Double.POSITIVE_INFINITY) {
@@ -460,14 +407,19 @@ public class player44 implements ContestSubmission
 				}	
 			}
 			
+			
+			
 			for (int i = 0; i < C.length; i++) {
 				for (int j = 0; j < C.length; j++) {	
 					C[i][j] = first[i][j] + cl * second[i][j] + fourth2[i][j];
 				}	
 			}
 			sigma = sigma * Math.exp((cs/damps)*(norm(ps)/chiN - 1));
-
+			
+			
+			
 			if (counteval - eigeneval > lambda / (cl + cmu )/N/10) {
+				
 				//Enforce symmetry
 				eigeneval = counteval;
 				double triuC[][] = new double[C.length][C.length];
@@ -475,6 +427,7 @@ public class player44 implements ContestSubmission
 					for (int j = 0 + i; j < C.length; j++) {
 						triuC[i][j] = C[i][j];
 					}
+					
 				}
 
 				double triuC1[][] = new double[C.length][C.length];
@@ -484,16 +437,22 @@ public class player44 implements ContestSubmission
 					}
 				}
 				
+				
 				double triuC1transpose[][] = transposeMatrix(triuC1);
+				
 				for (int i = 0; i < C.length; i++) {
 					for (int j = 0 + i + 1; j < C.length; j++) {
 						C[i][j] = triuC[i][j] + triuC1transpose[i][j];
 					}
+					
 				}
+				
+				
 
 				//Eigenvalues
 				RealMatrix test = MatrixUtils.createRealMatrix(C);
 				EigenDecomposition ok = new EigenDecomposition(test);
+				
 				
 				double hm[] = ok.getRealEigenvalues();
 				for (int i = 0; i < D.length; i++) {
@@ -576,7 +535,7 @@ public class player44 implements ContestSubmission
 			}
 			iteration = iteration + 1;
 		}
-		System.out.println("endingfitness:");
+		System.out.println("bestfitness:");
 		print(best);
 		printvector(bestgenotype);
 	}
