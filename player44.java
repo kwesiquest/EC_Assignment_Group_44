@@ -280,9 +280,9 @@ public class player44 implements ContestSubmission
 				}
 				counteval = counteval + 1;
 				if (counteval == evaluations_limit_ - 1) {
-					System.out.println("bestfitness:");
-					print(best);
-					printvector(bestgenotype);
+					//System.out.println("bestfitness:");
+					//print(best);
+					//printvector(bestgenotype);
 					return;
 				}
 			}
@@ -291,29 +291,29 @@ public class player44 implements ContestSubmission
 			for (int i = 0; i < arindex.length; i++) {
 				
 				if (arfitness[i] == Double.POSITIVE_INFINITY) {
-					System.out.println("bestfitness:");
-					print(best);
-					printvector(bestgenotype);
+					//System.out.println("bestfitness:");
+					//print(best);
+					//printvector(bestgenotype);
 					return;
 				}
 				if (arfitness[i] == Double.NEGATIVE_INFINITY) {
-					System.out.println("bestfitness:");
-					print(best);
-					printvector(bestgenotype);
+					//System.out.println("bestfitness:");
+					//print(best);
+					//printvector(bestgenotype);
 					return;
 				}
 			}
 			
-			System.out.println(" ");
-			System.out.println(" ");
-			System.out.println("MATRICES FOR ITERATION: ");
-			print(iteration);
-			printmatrix(arx);
-			printvector(arfitness);
-			printintvector(arindex);
-			System.out.println("END FOR ITERATION: ");
-			System.out.println(" ");
-			System.out.println(" ");
+			//System.out.println(" ");
+			//System.out.println(" ");
+			//System.out.println("MATRICES FOR ITERATION: ");
+			//print(iteration);
+			//printmatrix(arx);
+			//printvector(arfitness);
+			//printintvector(arindex);
+			//System.out.println("END FOR ITERATION: ");
+			//System.out.println(" ");
+			//System.out.println(" ");
 			
 			double xold[] = xmean.clone();
 			for (int i = 0; i < N; i++) {
@@ -519,8 +519,8 @@ public class player44 implements ContestSubmission
 				}
 			}
 			
-			min = 3003030303989899898.;
-			max = -9999999999999999999.;
+			min = 90030303039898998988888888.;
+			max = -9999999999999999999999999.;
 			
 			for (int i = 0; i < D.length; i++) {
 				if (D[i][i] < min) {
@@ -535,8 +535,8 @@ public class player44 implements ContestSubmission
 			}
 			iteration = iteration + 1;
 		}
-		System.out.println("bestfitness:");
-		print(best);
-		printvector(bestgenotype);
+		//System.out.println("bestfitness:");
+		//print(best);
+		//printvector(bestgenotype);
 	}
 }
