@@ -3,7 +3,7 @@
 ### step 0: copy files (player44.java, Individual.java, Population.java) into assignmentfiles_2017
 
 ### step 1: Paste in cmd
-javac -cp contest.jar:commons-math3-3.6.1.jar:. player44.java CMA_ES.java CrossOver.java Individual.java Mutation.java Population.java SelectionMethods.java
+javac -cp contest.jar:commons-math3-3.6.1.jar:. player44.java  CrossOver.java Individual.java Mutation.java Population.java SelectionMethods.java
 
 ### For Windows extra step ###
 jar uf contest.jar Individual.class 
@@ -11,14 +11,12 @@ jar uf contest.jar Population.class
 jar uf contest.jar CrossOver.class 
 jar uf contest.jar Mutation.class 
 jar uf contest.jar SelectionMethods.class 
-jar uf contest.jar CMA_ES.class
 
 ### step 2: Paste in cmd
-jar cmf MainClass.txt submission.jar player44.class CMA_ES.class CrossOver.class Individual.class Mutation.class Population.class SelectionMethods.class ./org/
+jar cmf MainClass.txt submission.jar player44.class CrossOver.class Individual.class Mutation.class Population.class SelectionMethods.class ./org/
 
 ### step 3: Paste in cmd
-java -jar testrun.jar -submission=player44 -evaluation=SphereEvaluation -seed=1 > analyze_results/storeresults_testCMA.txt
-
+java -jar submission.jar -submission=player44 -evaluation=SchaffersEvaluation -seed=1 > analyze_results/storeresults_schaffers_cma.txt
 
 # https://docs.google.com/document/d/1BEhSlbOyf5n7zEDs93WLa7zZ0y41FEYdjFyq24QEm_I/edit
 
