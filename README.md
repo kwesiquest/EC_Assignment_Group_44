@@ -19,6 +19,37 @@ jar cmf MainClass.txt submission.jar player44.class Population.class Individual.
 java -jar testrun.jar >storeresults.txt -submission=player44 -evaluation=BentCigarFunction -seed=1
 
 
+# parameter tuning
+
+### step 0: name parameters in the files "iw", "cc", "sc" and "popSize" and divide the floats by 10: 
+double w = Double.parseDouble(System.getProperty("iw"))/10;      
+double c1=Double.parseDouble(System.getProperty("cc"))/10; 
+double c2=Double.parseDouble(System.getProperty("sc"))/10;
+Integer.parseInt(System.getProperty("popSize"));
+
+### step 1: paste in terminal
+for iteration in {1..30};
+do for cc in 15 20 25; 
+do for sc in 15 20 25; 
+do for p in 30 100; 
+do for iw in 4 8; 
+do javac -cp contest.jar player44.java CrossOver.java Individual.java Mutation.java Population.java SelectionMethods.java Particle.java;  
+jar cmf MainClass.txt submission.jar player44.class CrossOver.class Individual.class Mutation.class Population.class SelectionMethods.class Particle.class; 
+java -DpopSize="$p" -Diw="$iw" -Dcc="$cc" -Dsc="$sc" -jar testrun.jar -submission=player44 -evaluation=KatsuuraEvaluation -seed=1 > analyze_results/storeresults_i"$iteration"_cc"$cc"_sc"$sc"_p"$p".txt;  
+done; done; done; done; done;
+
+### step 2: run python analysis file over all outputs
+cd analyze_results; python3 return_scores_over_all_runs.py
+
+### step 3: check results
+results_param_combi_tuning.txt
+
+
+
+
+
+
+
 # https://docs.google.com/document/d/1BEhSlbOyf5n7zEDs93WLa7zZ0y41FEYdjFyq24QEm_I/edit
 
 
