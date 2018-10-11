@@ -78,9 +78,18 @@ public class player44 implements ContestSubmission
 
 	// Run your algorithm here
 	public void run(){
-		int popSize = 50;//Integer.parseInt(System.getProperty("var1"));
+		int popSize = Integer.parseInt(System.getProperty("popSize"));//Integer.parseInt(System.getProperty("var1"));
 		int dimensions = 10; //	All functions take 10 input variables, so 10 dimensions
 		int generation = 0;
+
+		System.out.print("popSize: ");
+		System.out.println(Integer.parseInt(System.getProperty("popSize")));
+		System.out.print("inertiaWeight: ");
+		System.out.println(Double.parseDouble(System.getProperty("inertiaWeight"))/10);  
+		System.out.print("cognativeConstant: ");    
+		System.out.println(Double.parseDouble(System.getProperty("cognativeConstant"))/10);   
+		System.out.print("socialConstant: ");   
+		System.out.println(Double.parseDouble(System.getProperty("socialConstant"))/10); 
 
 		//standard algorithm parameters
 		int numberOfParentsToSelect = 12;
@@ -90,25 +99,31 @@ public class player44 implements ContestSubmission
 		double[] pos_best_g = new double[10];
 
 		//island parameters
-		boolean multiplePopulations = false;
-		int migrationRate = 10;
-		int migrationSize = 5;
+		int nPopulations = Integer.parseInt(System.getProperty("nPopulations"));
+		boolean mutationSwarm = false;
+		boolean multiplePopulations = true;
+		System.out.print("nPopulations:");
+		System.out.println(Integer.parseInt(System.getProperty("nPopulations")));
+		System.out.print("mutationSwarm:");
+		System.out.println(mutationSwarm); 
+		int migrationRate = 5;
+		int migrationSize = 2;
 		Island island = new Island(migrationRate, migrationSize);
 
 
 		//set up population(s)
-		Population population1 = setup(popSize, "swarm");
-		Population population2 = setup(popSize, "standard");
-		
-		island.addPopulation(population1);
+		for (int i = 0; i<nPopulations;i++){
+			Population population = setup(popSize, "swarm");
+			island.addPopulation(population);
 
-		if (multiplePopulations){
-			island.addPopulation(population2);
 		}
+
+
+	
 
 		while(evals < evaluations_limit_){
 
-			System.out.print(evals);
+			//System.out.println(evals);
 			
 			island.generations ++;
 			int whichPopulation = 0;
@@ -120,8 +135,6 @@ public class player44 implements ContestSubmission
 
 					//	Parent selection
 					List<Individual> selectedParents = select.GetFittestIndividuals(numberOfParentsToSelect, population);
-					System.out.print("selected: ");
-					System.out.print(selectedParents);
 									
 					// Reproduction
 					int numberOfParentsPerOffspring = 2;
@@ -212,18 +225,29 @@ public class player44 implements ContestSubmission
 					}
 
 					for(int i =0; i<popSize; i++) {
-						Individual currentIndividual = population.getIndividualAtIndex(i) ;
+						Individual currentIndividual = population.getIndividualAtIndex(i);
 						currentIndividual.updateVelocity(pos_best_g);
 						currentIndividual.updateGenotype();
-						double fitnessCurrentIndividual = (double) evaluation_.evaluate(currentIndividual.genotype);
-						currentIndividual.setFitness(fitnessCurrentIndividual);
+						if (mutationSwarm == true){
+							if (rnd_.nextDouble() > 0.1){
+								mutation.uniformMutation(currentIndividual);
+							}
+						}
+						double newFitness = (double) evaluation_.evaluate(currentIndividual.genotype);
+						currentIndividual.setFitness(newFitness);
 						evals++;
+						if (evals == evaluations_limit_){
+							return;
+						}
 
 					}
 
 
-					System.out.print("err_best_g: ");
-					System.out.println(err_best_g);
+
+
+
+					//System.out.print("err_best_g: ");
+					//System.out.println(err_best_g);
 
 				}
 

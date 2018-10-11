@@ -87,9 +87,9 @@ public class Individual{
 
 	public void updateVelocity(double[] pos_best_g) {
 		//W SHOULD BE BETWEEN 0.2 AND 0.9, ELSE BAD RESULTS
-		double w = 0.4; //Double.parseDouble(System.getProperty("var2"));       // constant inertia weight (how much to weigh the previous velocity)	(0.4 for random (fitness 4))
-		double c1= 1.5; //Double.parseDouble(System.getProperty("var3"));        // cognative constant <--mYB 1?		(1.5 for random (fitness 4))
-		double c2= 1.5; //Double.parseDouble(System.getProperty("var4"));        // social constant					(1.5 for random (fitness 4))
+		double w = Double.parseDouble(System.getProperty("inertiaWeight"))/10;       // constant inertia weight (how much to weigh the previous velocity)	(0.4 for random (fitness 4))
+		double c1= Double.parseDouble(System.getProperty("cognativeConstant"))/10;        // cognative constant <--mYB 1?		(1.5 for random (fitness 4))
+		double c2= Double.parseDouble(System.getProperty("socialConstant"))/10;        // social constant					(1.5 for random (fitness 4))
 
 		for(int i=0; i < 10; i++) {
 			double r1 = Math.random();
