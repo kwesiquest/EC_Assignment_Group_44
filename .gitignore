@@ -10,7 +10,6 @@ venv/
 *.class
 *.dll
 *.dylib
-*.jar
 *.txt
 *.so
 
