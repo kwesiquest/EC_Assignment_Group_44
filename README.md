@@ -44,34 +44,3 @@ cd analyze_results; python3 return_scores_over_all_runs.py
 ### step 3: check results
 results_param_combi_tuning.txt
 
-
-
-
-
-
-
-# https://docs.google.com/document/d/1BEhSlbOyf5n7zEDs93WLa7zZ0y41FEYdjFyq24QEm_I/edit
-
-
-
-
-
-
-Evolutionary Algorithm Cycle:
-
-Initialise population
-Determine fitness of all individuals in this population
-
-while(programrunning = true){
-  
-  Select parents who you wish to make children with
-  
-  Make child(ren) from those selected parents by mixing parent's genotype together
-  
-  Mutate children by altering their genotype
-  
-  Determine fitness of all the new children
-  
-  Determine which individuals of the population (or children) you wish to keep
-  
-}
